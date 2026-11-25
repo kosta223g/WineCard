@@ -8,7 +8,7 @@
         "reviews": "88 ratings"
       },
       "location": "Spain\n·\nEmpordà",
-      "image": "https://images.vivino.com/thumbs/ApnIiXjcT5Kc33OHgNb9dA_375x500.jpg",
+      "image": "https://images.vivino.com/thumbs/ApnIiXjcT5Kc33OHgNb9dA_pb_x300.png",
       "id": 1
     },
     {
@@ -162,7 +162,7 @@
         "reviews": "44 ratings"
       },
       "location": "United States\n·\nMoon Mountain District",
-      "image": "https://images.vivino.com/thumbs/2Uw98KdRSdGsqxCvpXxyOQ_375x500.jpg",
+      "image": "https://images.vivino.com/thumbs/2Uw98KdRSdGsqxCvpXxyOQ_pb_x300.png",
       "id": 16
     },
     {
@@ -217,7 +217,7 @@
         "reviews": "42 ratings"
       },
       "location": "United States\n·\nNapa Valley",
-      "image": "https://images.vivino.com/thumbs/rYocDDvwSaecbbp1vfh0Wg_375x500.jpg",
+      "image": "https://images.vivino.com/thumbs/rYocDDvwSaecbbp1vfh0Wg_pb_x300.png",
       "id": 21
     },
     {
@@ -261,7 +261,7 @@
         "reviews": "40 ratings"
       },
       "location": "Hungary\n·\nSzekszárd",
-      "image": "https://images.vivino.com/thumbs/00ghwn0dmfp7w_375x500.jpg",
+      "image": "https://images.vivino.com/thumbs/00ghwn0dmfp7w_pb_x300.png",
       "id": 25
     },
     {
@@ -272,7 +272,7 @@
         "reviews": "39 ratings"
       },
       "location": "Italy\n·\nVeneto",
-      "image": "https://images.vivino.com/thumbs/bDEH99ARSpCwFbDf3bct3w_375x500.jpg",
+      "image": "https://images.vivino.com/thumbs/bDEH99ARSpCwFbDf3bct3w_pb_x300.png",
       "id": 26
     },
     {
@@ -327,7 +327,7 @@
         "reviews": "37 ratings"
       },
       "location": "Italy\n·\nBarolo",
-      "image": "https://images.vivino.com/thumbs/aI1jZoigSSKcf7nAxPd57Q_375x500.jpg",
+      "image": "https://images.vivino.com/thumbs/aI1jZoigSSKcf7nAxPd57Q_pb_x300.png",
       "id": 31
     }
   ],
@@ -676,14 +676,14 @@
       "id": 1
     },
     {
-      "winery": "Antinori",
-      "wine": "Fonte de' Medici 2011",
+      "winery": "Château d'Esclans",
+      "wine": "Whispering Angel Rosé 2022",
       "rating": {
         "average": "3.1",
         "reviews": "199 ratings"
       },
-      "location": "Italy\n·\nVino d'Italia",
-      "image": "https://images.vivino.com/highlights/icon/top_ranked.svg",
+      "location": "France · Provence · Côtes de Provence",
+      "image": "https://deep-image-bucket.s3.amazonaws.com/result/ch-teau-d-esclans-c-tes-de-provence-whispering-angel-ros-2022-bottiglia-750-ml.png",
       "id": 2
     },
     {
@@ -731,14 +731,14 @@
       "id": 6
     },
     {
-      "winery": "Castello di Amorosa",
-      "wine": "La Fantasia 2015",
+      "winery": "Bodegas Muga",
+      "wine": "Bodegas Muga Rosado 2022",
       "rating": {
         "average": "3.8",
         "reviews": "150 ratings"
       },
-      "location": "United States\n·\nCalifornia",
-      "image": "https://images.vivino.com/highlights/icon/top_ranked.svg",
+      "location": "Spain · Rioja",
+      "image": "https://winesonline.com.sg/cdn/shop/products/Bodegas-Muga-Rosado_1200x.jpg?v=1548312510",
       "id": 7
     },
     {
@@ -793,7 +793,7 @@
         "reviews": "76 ratings"
       },
       "location": "Spain\n·\nRibera del Duero",
-      "image": "https://images.vivino.com/highlights/icon/most_user_rated.svg",
+      "image": "https://www.vinosribera.com/143-home_default/think-pink-vilano-rosado.jpg",
       "id": 12
     },
     {
@@ -881,18 +881,18 @@
         "reviews": "30 ratings"
       },
       "location": "Italy\n·\nValpolicella",
-      "image": "https://images.vivino.com/highlights/icon/most_user_rated.svg",
+      "image": "https://www.olioeolio.de/WebRoot/Store28/Shops/91179676/61BF/1F4E/A25D/BE68/DC79/0A0C/6D10/62FC/Molinara-1.jpg",
       "id": 20
     },
     {
-      "winery": "Bartenura",
-      "wine": "Malvasia di Casorzo 2017",
+      "winery": "Château Minuty",
+      "wine": "Rosé et Or 2022",
       "rating": {
         "average": "4.4",
         "reviews": "30 ratings"
       },
-      "location": "Italy\n·\nMalvasia di Casorzo d'Asti",
-      "image": "https://images.vivino.com/thumbs/sJd7QpiATmqtzQq3xwcvpg_pb_x300.png",
+      "location": "France · Provence · Côtes de Provence",
+      "image": "https://media.cdnws.com/_i/190754/5313/197/16/rose-et-or-minuty.jpeg",
       "id": 21
     },
     {
@@ -918,25 +918,25 @@
       "id": 23
     },
     {
-      "winery": "Domaine Serisier",
-      "wine": "Bordeaux Rosé 2012",
+      "winery": "Château Miraval",
+      "wine": "Miraval Côtes de Provence Rosé 2022",
       "rating": {
         "average": "3.3",
         "reviews": "27 ratings"
       },
-      "location": "France\n·\nBordeaux",
-      "image": "https://images.vivino.com/highlights/icon/top_ranked.svg",
+      "location": "France · Provence · Côtes de Provence",
+      "image": "https://www.lloydswines.com/cdn/shop/files/Miraval_Ros_1200x1200.png?v=1751559577",
       "id": 24
     },
     {
-      "winery": "Monte da Ravasqueira",
-      "wine": "Touriga Nacional 2010",
+      "winery": "Château Minuty",
+      "wine": "M Rosé 2022",
       "rating": {
         "average": "3.6",
         "reviews": "26 ratings"
       },
-      "location": "Portugal\n·\nAlentejano",
-      "image": "https://images.vivino.com/thumbs/mE9if7kSTWOjfGBiV5T5CA_pb_x300.png",
+      "location": "France · Provence · Côtes de Provence",
+      "image": "https://www.wineswholesales.com.sg/cdn/shop/products/MinutyMCotesDeProvenceRose.png?v=1677740187",
       "id": 25
     },
     {
