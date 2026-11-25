@@ -87,7 +87,7 @@ fun WineCatalogScreen(
                         modifier = Modifier.padding(end = 18.dp)
                     ) {
                         Text(
-                            text = "№ 04",
+                            text = "№ 04 · 2",
                             modifier = Modifier.padding(horizontal = 13.dp, vertical = 8.dp),
                             color = WineBurgundy,
                             fontSize = 11.sp,

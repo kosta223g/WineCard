@@ -3,6 +3,7 @@ package com.example.winecard
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 
 /*
@@ -103,13 +104,19 @@ data class WineCatalogUiState(
         }
 }
 
-class WineCatalogViewModel : ViewModel() {
-    var uiState by mutableStateOf(WineCatalogUiState())
+class WineCatalogViewModel(private val savedStateHandle: SavedStateHandle) : ViewModel() {
+    var uiState by mutableStateOf(
+        WineCatalogUiState(
+            selectedCategory = savedStateHandle.get<String>("selectedCategory")
+                ?.takeIf { it in wineCategories } ?: "Усі"
+        )
+    )
         private set
 
     fun onCategorySelected(category: String) {
         if (category in uiState.categories) {
             uiState = uiState.copy(selectedCategory = category)
+            savedStateHandle["selectedCategory"] = category
         }
     }
 }
