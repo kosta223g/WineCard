@@ -3,7 +3,6 @@ package com.example.winecard
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.background
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
@@ -22,6 +21,9 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.LazyListState
+import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -44,12 +46,10 @@ import androidx.compose.material3.IconButton
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -72,11 +72,14 @@ fun WineCatalogScreen(
     onItemClick: (Int) -> Unit,
     onSettingsClick: () -> Unit,
     sortByRating: Boolean,
+    listState: LazyListState,
     viewModel: WineCatalogViewModel
 ) {
     val uiState = viewModel.uiState
     val selectedCategory = uiState.selectedCategory
-    val filteredWines = sortCatalogWines(uiState.filteredWines, sortByRating)
+    val filteredWines = remember(uiState.wines, selectedCategory, sortByRating) {
+        sortCatalogWines(uiState.filteredWines, sortByRating)
+    }
 
     Scaffold(
         containerColor = WineBackground,
@@ -110,7 +113,7 @@ fun WineCatalogScreen(
                         modifier = Modifier.padding(end = 18.dp)
                     ) {
                         Text(
-                            text = "№ 08",
+                            text = "№ 09",
                             modifier = Modifier.padding(horizontal = 13.dp, vertical = 8.dp),
                             color = WineBurgundy,
                             fontSize = 11.sp,
@@ -126,13 +129,13 @@ fun WineCatalogScreen(
         }
     ) { innerPadding ->
         LazyColumn(
-            modifier = Modifier.fillMaxSize().padding(innerPadding).padding(horizontal = 20.dp),
-            contentPadding = androidx.compose.foundation.layout.PaddingValues(bottom = 28.dp),
+            modifier = Modifier.fillMaxSize().padding(innerPadding),
+            state = listState,
+            contentPadding = PaddingValues(start = 20.dp, end = 20.dp, top = 22.dp, bottom = 28.dp),
             verticalArrangement = Arrangement.spacedBy(13.dp)
         ) {
-            item {
+            item(key = "catalog-header", contentType = "header") {
                 Column {
-            Spacer(modifier = Modifier.height(22.dp))
 
             Text(
                 text = "КОЛЕКЦІЯ ДЛЯ ЗНАЙОМСТВА",
@@ -212,21 +215,21 @@ fun WineCatalogScreen(
                 }
             }
             when {
-                uiState.isLoading -> item {
+                uiState.isLoading -> item(key = "catalog-loading", contentType = "status") {
                     Box(Modifier.fillMaxWidth().padding(24.dp), contentAlignment = Alignment.Center) {
                         CircularProgressIndicator(color = WineBurgundy)
                     }
                 }
-                uiState.error != null -> item {
+                uiState.error != null -> item(key = "catalog-error", contentType = "status") {
                     WineErrorContent(error = uiState.error, onRetry = viewModel::refresh)
                 }
-                filteredWines.isEmpty() -> item { EmptyWineResults(onRetry = viewModel::refresh) }
-                else -> items(filteredWines, key = { it.id }) { wine ->
+                filteredWines.isEmpty() -> item(key = "catalog-empty", contentType = "status") { EmptyWineResults(onRetry = viewModel::refresh) }
+                else -> items(filteredWines, key = { it.id }, contentType = { "wine" }) { wine ->
                     WineCard(wine = wine, onClick = { onItemClick(wine.id) })
                 }
             }
-            item {
-                Text("Дані SampleAPIs · лабораторна робота №8", color = WineMuted,
+            item(key = "catalog-footer", contentType = "footer") {
+                Text("Дані SampleAPIs · лабораторна робота №9", color = WineMuted,
                     fontSize = 10.sp, modifier = Modifier.padding(vertical = 12.dp))
             }
         }
@@ -318,129 +321,12 @@ private fun EmptyWineResults(onRetry: () -> Unit) {
 }
 
 @Composable
-private fun WineCard(wine: Wine, onClick: () -> Unit) {
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .clip(RoundedCornerShape(22.dp))
-            .clickable(onClick = onClick)
-            .background(Color.White)
-            .padding(12.dp),
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        Box(
-            modifier = Modifier
-                .width(112.dp)
-                .height(148.dp)
-                .clip(RoundedCornerShape(16.dp))
-                .background(
-                    brush = Brush.verticalGradient(
-                        colors = listOf(
-                            Color(0xFFF5EDE6),
-                            Color(0xFFEDE0D6)
-                        )
-                    )
-                ),
-            contentAlignment = Alignment.Center
-        ) {
-            Text("🍷", fontSize = 28.sp, color = WineBurgundy)
-
-            Surface(
-                modifier = Modifier
-                    .align(Alignment.TopStart)
-                    .padding(7.dp),
-                color = Color(0xFFFDF9F4),
-                shape = RoundedCornerShape(50)
-            ) {
-                Text(
-                    text = wine.category.uppercase(),
-                    color = WineBurgundy,
-                    fontSize = 8.sp,
-                    fontWeight = FontWeight.Bold,
-                    letterSpacing = 0.7.sp,
-                    modifier = Modifier.padding(horizontal = 7.dp, vertical = 4.dp)
-                )
-            }
-        }
-
-        Spacer(modifier = Modifier.width(14.dp))
-
-        Column(
-            modifier = Modifier.weight(1f)
-        ) {
-            Text(
-                text = wine.winery.uppercase(),
-                color = WineBurgundy,
-                fontSize = 9.sp,
-                fontWeight = FontWeight.Bold,
-                letterSpacing = 1.1.sp,
-                maxLines = 1,
-                overflow = TextOverflow.Ellipsis
-            )
-
-            Spacer(modifier = Modifier.height(5.dp))
-
-            Text(
-                text = wine.wine,
-                color = WineInk,
-                fontSize = 17.sp,
-                lineHeight = 21.sp,
-                fontWeight = FontWeight.SemiBold,
-                fontFamily = FontFamily.Serif,
-                maxLines = 2,
-                overflow = TextOverflow.Ellipsis
-            )
-
-            Spacer(modifier = Modifier.height(11.dp))
-
-            Text(
-                text = "РЕГІОН",
-                color = WineMuted,
-                fontSize = 8.sp,
-                fontWeight = FontWeight.Bold,
-                letterSpacing = 1.2.sp
-            )
-
-            Spacer(modifier = Modifier.height(3.dp))
-
-            Text(
-                text = wine.location,
-                color = WineInk,
-                fontSize = 11.sp,
-                lineHeight = 15.sp,
-                maxLines = 2,
-                overflow = TextOverflow.Ellipsis
-            )
-
-            Spacer(modifier = Modifier.height(10.dp))
-
-            Row(
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Text(
-                    text = "★ ${wine.rating.average}",
-                    color = WineGold,
-                    fontSize = 13.sp,
-                    fontWeight = FontWeight.Bold
-                )
-                Spacer(modifier = Modifier.width(7.dp))
-                Text(
-                    text = wine.rating.reviews,
-                    color = WineMuted,
-                    fontSize = 9.sp,
-                    maxLines = 1,
-                    overflow = TextOverflow.Ellipsis
-                )
-            }
-        }
-    }
-}
-
-@Composable
 fun WineCardApp() {
     WineCardTheme {
         // Activity-scoped ViewModel survives navigation and rotation.
         val catalogViewModel: WineCatalogViewModel = viewModel()
+        // Hoisted outside NavHost: retained while the details destination is visible.
+        val catalogListState = rememberLazyListState()
         val navController = rememberNavController()
         val context = LocalContext.current.applicationContext
         val settings = remember(context) { WineSettingsRepository(context) }
@@ -451,6 +337,7 @@ fun WineCardApp() {
             composable("catalog") {
                 WineCatalogScreen(
                     viewModel = catalogViewModel,
+                    listState = catalogListState,
                     sortByRating = sortByRating ?: DEFAULT_SORT_BY_RATING,
                     onSettingsClick = {
                         navController.navigate("settings") { launchSingleTop = true }

@@ -106,5 +106,9 @@ internal suspend fun loadWines(category: String, api: WineApi = WineNetwork.api)
         val wines = rows.mapNotNull { it.toWine(label) }
         if (rows.isNotEmpty() && wines.isEmpty()) throw SerializationException("No valid wine IDs")
         wines
-    }.distinctBy { it.id }
+    }.let(::uniqueCatalogWines)
 }
+
+// IDs are stable within category; repeated source IDs must never reach LazyColumn.
+internal fun uniqueCatalogWines(wines: List<Wine>): List<Wine> = wines.distinctBy { it.id }
+
