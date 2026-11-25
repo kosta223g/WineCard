@@ -4,6 +4,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.background
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
@@ -42,18 +43,24 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavType
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import com.example.winecard.ui.theme.WineCardTheme
 
-private val WineBackground = Color(0xFFF7F3ED)
-private val WineInk = Color(0xFF2B2021)
-private val WineBurgundy = Color(0xFF76283B)
-private val WineMuted = Color(0xFF887D77)
-private val WineGold = Color(0xFFB6813F)
+internal val WineBackground = Color(0xFFF7F3ED)
+internal val WineInk = Color(0xFF2B2021)
+internal val WineBurgundy = Color(0xFF76283B)
+internal val WineMuted = Color(0xFF887D77)
+internal val WineGold = Color(0xFFB6813F)
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun WineCatalogScreen(
-    viewModel: WineCatalogViewModel = viewModel()
+    onItemClick: (Int) -> Unit,
+    viewModel: WineCatalogViewModel
 ) {
     val uiState = viewModel.uiState
     val selectedCategory = uiState.selectedCategory
@@ -87,7 +94,7 @@ fun WineCatalogScreen(
                         modifier = Modifier.padding(end = 18.dp)
                     ) {
                         Text(
-                            text = "№ 04 · 2",
+                            text = "№ 05",
                             modifier = Modifier.padding(horizontal = 13.dp, vertical = 8.dp),
                             color = WineBurgundy,
                             fontSize = 11.sp,
@@ -186,7 +193,7 @@ fun WineCatalogScreen(
                 EmptyWineResults()
             } else {
                 filteredWines.forEachIndexed { index, wine ->
-                    WineCard(wine = wine)
+                    WineCard(wine = wine, onClick = { onItemClick(wine.id) })
                     if (index != filteredWines.lastIndex) {
                         Spacer(modifier = Modifier.height(13.dp))
                     }
@@ -210,7 +217,7 @@ fun WineCatalogScreen(
                 )
                 Spacer(modifier = Modifier.width(8.dp))
                 Text(
-                    text = "Демонстраційний каталог · лабораторна робота №4",
+                    text = "Демонстраційний каталог · лабораторна робота №5",
                     color = WineMuted,
                     fontSize = 10.sp
                 )
@@ -303,11 +310,12 @@ private fun EmptyWineResults() {
 }
 
 @Composable
-private fun WineCard(wine: Wine) {
+private fun WineCard(wine: Wine, onClick: () -> Unit) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
             .clip(RoundedCornerShape(22.dp))
+            .clickable(onClick = onClick)
             .background(Color.White)
             .padding(12.dp),
         verticalAlignment = Alignment.CenterVertically
@@ -426,7 +434,7 @@ private fun WineCard(wine: Wine) {
     }
 }
 
-private fun wineImageResource(image: String): Int {
+internal fun wineImageResource(image: String): Int {
     return when (image) {
         "wine_cabernet" -> R.drawable.wine_cabernet
         "wine_pinot" -> R.drawable.wine_pinot
@@ -438,7 +446,32 @@ private fun wineImageResource(image: String): Int {
 @Composable
 fun WineCardApp() {
     WineCardTheme {
-        WineCatalogScreen()
+        // Activity-scoped ViewModel survives navigation and rotation.
+        val catalogViewModel: WineCatalogViewModel = viewModel()
+        val navController = rememberNavController()
+
+        NavHost(navController = navController, startDestination = "catalog") {
+            composable("catalog") {
+                WineCatalogScreen(
+                    viewModel = catalogViewModel,
+                    onItemClick = { id ->
+                        navController.navigate("details/$id") {
+                            launchSingleTop = true
+                        }
+                    }
+                )
+            }
+            composable(
+                route = "details/{id}",
+                arguments = listOf(navArgument("id") { type = NavType.IntType })
+            ) { entry ->
+                val id = entry.arguments?.getInt("id")
+                WineDetailsScreen(
+                    wine = id?.let { catalogViewModel.findWineById(it) },
+                    onBackClick = { navController.popBackStack() }
+                )
+            }
+        }
     }
 }
 
