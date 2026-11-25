@@ -34,6 +34,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -113,7 +114,7 @@ fun WineCatalogScreen(
                         modifier = Modifier.padding(end = 18.dp)
                     ) {
                         Text(
-                            text = "№ 09",
+                            text = "№ 10",
                             modifier = Modifier.padding(horizontal = 13.dp, vertical = 8.dp),
                             color = WineBurgundy,
                             fontSize = 11.sp,
@@ -128,8 +129,13 @@ fun WineCatalogScreen(
             )
         }
     ) { innerPadding ->
+        PullToRefreshBox(
+            isRefreshing = uiState.isRefreshing,
+            onRefresh = viewModel::pullToRefresh,
+            modifier = Modifier.fillMaxSize().padding(innerPadding)
+        ) {
         LazyColumn(
-            modifier = Modifier.fillMaxSize().padding(innerPadding),
+            modifier = Modifier.fillMaxSize(),
             state = listState,
             contentPadding = PaddingValues(start = 20.dp, end = 20.dp, top = 22.dp, bottom = 28.dp),
             verticalArrangement = Arrangement.spacedBy(13.dp)
@@ -214,6 +220,11 @@ fun WineCatalogScreen(
 
                 }
             }
+            uiState.refreshError?.let { error ->
+                item(key = "catalog-refresh-error", contentType = "status") {
+                    WineErrorContent(error, viewModel::pullToRefresh)
+                }
+            }
             when {
                 uiState.isLoading -> item(key = "catalog-loading", contentType = "status") {
                     Box(Modifier.fillMaxWidth().padding(24.dp), contentAlignment = Alignment.Center) {
@@ -223,15 +234,19 @@ fun WineCatalogScreen(
                 uiState.error != null -> item(key = "catalog-error", contentType = "status") {
                     WineErrorContent(error = uiState.error, onRetry = viewModel::refresh)
                 }
+                uiState.isRefreshing && filteredWines.isEmpty() -> item(key = "catalog-refreshing", contentType = "status") {
+                    Text("Оновлюємо каталог…", color = WineMuted)
+                }
                 filteredWines.isEmpty() -> item(key = "catalog-empty", contentType = "status") { EmptyWineResults(onRetry = viewModel::refresh) }
                 else -> items(filteredWines, key = { it.id }, contentType = { "wine" }) { wine ->
                     WineCard(wine = wine, onClick = { onItemClick(wine.id) })
                 }
             }
             item(key = "catalog-footer", contentType = "footer") {
-                Text("Дані SampleAPIs · демонстраційні рейтинги · лабораторна робота №9", color = WineMuted,
+                Text("Дані SampleAPIs · демонстраційні рейтинги · лабораторна робота №10", color = WineMuted,
                     fontSize = 10.sp, modifier = Modifier.padding(vertical = 12.dp))
             }
+        }
         }
     }
 }

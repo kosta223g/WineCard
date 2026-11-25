@@ -13,6 +13,12 @@ import retrofit2.http.Url
 import kotlinx.serialization.SerializationException
 import retrofit2.HttpException
 import java.io.IOException
+import okhttp3.HttpUrl.Companion.toHttpUrlOrNull
+import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.sync.Semaphore
+import kotlinx.coroutines.sync.withPermit
 
 @Serializable
 data class WineRatingDto(val average: JsonPrimitive? = null, val reviews: JsonPrimitive? = null)
@@ -45,7 +51,7 @@ internal fun WineDto.toWine(category: String): Wine? {
             rating?.average?.contentOrNull?.takeIf { it.toDoubleOrNull()?.isFinite() == true } ?: "—",
             rating?.reviews?.contentOrNull?.takeIf { it.isNotBlank() } ?: "Немає даних"
         ),
-        image = image?.trim().orEmpty(),
+        image = normalizeWineImageUrl(image),
         category = category
     )
 }
@@ -69,6 +75,9 @@ data class WineDatasetDto(
 interface WineApi {
     @GET
     suspend fun getDataset(@Url url: String): WineDatasetDto
+
+    @GET
+    suspend fun getCategory(@Url url: String): List<WineDto>
 }
 
 object WineNetwork {
@@ -80,33 +89,52 @@ object WineNetwork {
     val api: WineApi = retrofit.create(WineApi::class.java)
 }
 
-// Curated SampleAPIs dataset hosted remotely; no bundled wine data.
-internal const val WINE_DATA_URL = "https://raw.githubusercontent.com/kosta223g/WineCard/main/data/wines.json"
-internal const val WINE_DATA_MIRROR = "https://cdn.jsdelivr.net/gh/kosta223g/WineCard@main/data/wines.json"
-
-internal suspend fun loadWines(category: String, api: WineApi = WineNetwork.api): List<Wine> {
-    val dataset = try {
-        api.getDataset(WINE_DATA_URL)
-    } catch (cancel: CancellationException) {
-        throw cancel
-    } catch (error: Exception) {
-        try {
-            api.getDataset(WINE_DATA_MIRROR)
-        } catch (cancel: CancellationException) {
-            throw cancel
-        } catch (mirror: Exception) {
-            // Preserve a more informative response error if the mirror cannot connect.
-            if (mirror is IOException && (error is HttpException || error is SerializationException)) throw error
-            throw mirror
-        }
+// Resolve and validate image addresses before they reach Compose.
+internal fun normalizeWineImageUrl(value: String?): String {
+    val raw = value?.trim().orEmpty()
+    if (raw.isEmpty()) return ""
+    val candidate = when {
+        raw.startsWith("//") -> "https:$raw"
+        raw.startsWith("http://", ignoreCase = true) -> "https://" + raw.substring(7)
+        raw.startsWith("https://", ignoreCase = true) -> raw
+        raw.startsWith("/thumbs/") -> "https://images.vivino.com$raw"
+        raw.startsWith("thumbs/") -> "https://images.vivino.com/$raw"
+        else -> return ""
     }
+    val url = candidate.toHttpUrlOrNull() ?: return ""
+    return if (url.isHttps && url.username.isEmpty() && url.password.isEmpty()) url.toString() else ""
+}
+
+// Separate remote category resources; at most two requests at a time globally.
+internal const val WINE_CATEGORY_BASE = "https://raw.githubusercontent.com/kosta223g/WineCard/main/data/"
+internal const val WINE_CATEGORY_MIRROR = "https://cdn.jsdelivr.net/gh/kosta223g/WineCard@main/data/"
+private val catalogRequestLimit = Semaphore(2)
+
+internal suspend fun loadWines(category: String, api: WineApi = WineNetwork.api): List<Wine> = coroutineScope {
     val endpoints = if (category == "Усі") wineEndpoints else wineEndpoints.filterKeys { it == category }
-    return endpoints.flatMap { (label, endpoint) ->
-        val rows = dataset.category(endpoint)
-        val wines = rows.mapNotNull { it.toWine(label) }
-        if (rows.isNotEmpty() && wines.isEmpty()) throw SerializationException("No valid wine IDs")
-        wines
-    }.let(::uniqueCatalogWines)
+    endpoints.map { (label, endpoint) ->
+        async {
+            val rows = catalogRequestLimit.withPermit {
+                try {
+                    api.getCategory("$WINE_CATEGORY_BASE$endpoint.json")
+                } catch (cancel: CancellationException) {
+                    throw cancel
+                } catch (error: Exception) {
+                    try {
+                        api.getCategory("$WINE_CATEGORY_MIRROR$endpoint.json")
+                    } catch (cancel: CancellationException) {
+                        throw cancel
+                    } catch (mirror: Exception) {
+                        if (mirror is IOException && (error is HttpException || error is SerializationException)) throw error
+                        throw mirror
+                    }
+                }
+            }
+            val wines = rows.mapNotNull { it.toWine(label) }
+            if (rows.isNotEmpty() && wines.isEmpty()) throw SerializationException("No valid wine IDs")
+            wines
+        }
+    }.awaitAll().flatten().let(::uniqueCatalogWines)
 }
 
 // IDs are stable within category; repeated source IDs must never reach LazyColumn.

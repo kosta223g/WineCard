@@ -44,7 +44,7 @@ internal fun WineCard(wine: Wine, onClick: () -> Unit) {
                 ),
             contentAlignment = Alignment.Center
         ) {
-            Text("🍷", fontSize = 28.sp, color = WineBurgundy)
+            WinePhoto(wine, Modifier.fillMaxSize().padding(top = 25.dp, bottom = 6.dp, start = 6.dp, end = 6.dp))
 
             Surface(
                 modifier = Modifier

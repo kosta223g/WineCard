@@ -4,14 +4,11 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.SavedStateHandle
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import android.app.Application
-import android.net.ConnectivityManager
-import android.net.NetworkCapabilities
 import androidx.lifecycle.AndroidViewModel
 
 data class WineRating(val average: String, val reviews: String)
@@ -27,6 +24,8 @@ data class WineCatalogUiState(
     val categories: List<String> = wineCategories,
     val wines: List<Wine> = emptyList(),
     val isLoading: Boolean = true,
+    val isRefreshing: Boolean = false,
+    val refreshError: WineLoadError? = null,
     val error: WineLoadError? = null
 ) {
     val filteredWines: List<Wine>
@@ -52,23 +51,42 @@ class WineCatalogViewModel(application: Application, private val savedStateHandl
         refresh()
     }
 
-    fun refresh() {
+    fun refresh() = requestCatalog(keepContent = false)
+
+    fun pullToRefresh() {
+        if (uiState.isLoading || uiState.isRefreshing) return
+        requestCatalog(keepContent = true)
+    }
+
+    private fun requestCatalog(keepContent: Boolean) {
         loadingJob?.cancel()
         val category = uiState.selectedCategory
-        uiState = uiState.copy(wines = emptyList(), isLoading = true, error = null)
+        uiState = uiState.copy(
+            wines = if (keepContent) uiState.wines else emptyList(),
+            isLoading = !keepContent, isRefreshing = keepContent,
+            error = null, refreshError = null
+        )
         loadingJob = viewModelScope.launch {
             try {
                 if (!hasNetworkConnection(getApplication())) {
-                    uiState = uiState.copy(isLoading = false, error = WineLoadError.NoNetwork)
+                    finishFailure(WineLoadError.NoNetwork, keepContent)
                     return@launch
                 }
                 val wines = loadWines(category)
-                uiState = uiState.copy(wines = wines, isLoading = false)
+                uiState = uiState.copy(wines = wines, isLoading = false, isRefreshing = false, error = null, refreshError = null)
             } catch (cancel: CancellationException) {
                 throw cancel
             } catch (error: Exception) {
-                uiState = uiState.copy(isLoading = false, error = classifyWineError(error, hasNetworkConnection(getApplication())))
+                finishFailure(classifyWineError(error, hasNetworkConnection(getApplication())), keepContent)
             }
         }
+    }
+    private fun finishFailure(error: WineLoadError, keepContent: Boolean) {
+        val retain = keepContent && uiState.wines.isNotEmpty()
+        uiState = uiState.copy(
+            isLoading = false, isRefreshing = false,
+            error = if (retain) null else error,
+            refreshError = if (retain) error else null
+        )
     }
 }

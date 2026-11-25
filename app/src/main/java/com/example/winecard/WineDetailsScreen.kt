@@ -55,6 +55,7 @@ fun WineDetailsScreen(wine: Wine?, isLoading: Boolean = false, error: WineLoadEr
                     color = WineMuted)
                 OutlinedButton(onClick = onBackClick) { Text("До каталогу") }
             } else {
+                WinePhoto(wine, Modifier.fillMaxWidth().height(220.dp).clip(RoundedCornerShape(16.dp)).background(Color.White).padding(12.dp))
                 Text(wine.category.uppercase(), color = WineBurgundy,
                     fontWeight = FontWeight.Bold, letterSpacing = 2.sp, fontSize = 12.sp)
                 Text(wine.wine, color = WineInk, fontSize = 32.sp, lineHeight = 38.sp,
@@ -66,7 +67,7 @@ fun WineDetailsScreen(wine: Wine?, isLoading: Boolean = false, error: WineLoadEr
                 WineDetailSection("Виробник", wine.winery)
                 WineDetailSection("Кількість оцінок у джерелі", wine.rating.reviews)
                 WineDetailSection("ID у джерелі", wine.apiId.toString())
-                Text("Джерело: SampleAPIs. Рейтинг демонстраційний. Зображення будуть підключені в роботі №10.",
+                Text("Джерело: SampleAPIs. Рейтинг демонстраційний. Фото з адреси джерела.",
                     color = WineMuted, fontSize = 12.sp, lineHeight = 18.sp)
             }
         }
