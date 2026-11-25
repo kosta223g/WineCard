@@ -49,6 +49,7 @@ dependencies {
     implementation(libs.androidx.navigation.compose)
     implementation(libs.androidx.datastore.preferences)
     implementation(libs.retrofit)
+    implementation(libs.okhttp)
     implementation(libs.retrofit.serialization)
     implementation(libs.kotlinx.serialization.json)
     implementation(libs.androidx.lifecycle.viewmodel.ktx)
