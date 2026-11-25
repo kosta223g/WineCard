@@ -1,6 +1,8 @@
 package com.example.winecard
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
@@ -37,7 +39,7 @@ fun WineSettingsScreen(
         }
     ) { padding ->
         Column(
-            modifier = Modifier.fillMaxSize().padding(padding).padding(20.dp),
+            modifier = Modifier.fillMaxSize().padding(padding).verticalScroll(rememberScrollState()).padding(20.dp),
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
             Text("Твій каталог", color = WineInk, fontSize = 28.sp,
@@ -66,6 +68,7 @@ fun WineSettingsScreen(
                 }
             }
             Text("Зміни застосовуються автоматично.", color = WineMuted, fontSize = 12.sp)
+            WineUpdateNotificationControl()
         }
     }
 }

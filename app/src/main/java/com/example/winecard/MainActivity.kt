@@ -110,7 +110,7 @@ fun WineCatalogScreen(
                         modifier = Modifier.padding(end = 18.dp)
                     ) {
                         Text(
-                            text = "№ 07",
+                            text = "№ 08",
                             modifier = Modifier.padding(horizontal = 13.dp, vertical = 8.dp),
                             color = WineBurgundy,
                             fontSize = 11.sp,
@@ -217,19 +217,16 @@ fun WineCatalogScreen(
                         CircularProgressIndicator(color = WineBurgundy)
                     }
                 }
-                uiState.hasError -> item {
-                    Column(Modifier.fillMaxWidth().padding(16.dp), horizontalAlignment = Alignment.CenterHorizontally) {
-                        Text("Не вдалося завантажити вина. Перевір інтернет.", color = WineInk)
-                        OutlinedButton(onClick = viewModel::refresh) { Text("Повторити") }
-                    }
+                uiState.error != null -> item {
+                    WineErrorContent(error = uiState.error, onRetry = viewModel::refresh)
                 }
-                filteredWines.isEmpty() -> item { EmptyWineResults() }
+                filteredWines.isEmpty() -> item { EmptyWineResults(onRetry = viewModel::refresh) }
                 else -> items(filteredWines, key = { it.id }) { wine ->
                     WineCard(wine = wine, onClick = { onItemClick(wine.id) })
                 }
             }
             item {
-                Text("Дані SampleAPIs · лабораторна робота №7", color = WineMuted,
+                Text("Дані SampleAPIs · лабораторна робота №8", color = WineMuted,
                     fontSize = 10.sp, modifier = Modifier.padding(vertical = 12.dp))
             }
         }
@@ -276,7 +273,7 @@ private fun WineCategorySelector(
 }
 
 @Composable
-private fun EmptyWineResults() {
+private fun EmptyWineResults(onRetry: () -> Unit) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -311,11 +308,12 @@ private fun EmptyWineResults() {
         Spacer(modifier = Modifier.height(7.dp))
 
         Text(
-            text = "Обери інший тип вина, щоб переглянути доступні позиції.",
+            text = "Сервер повернув порожній список. Обери іншу категорію або онови каталог.",
             color = WineMuted,
             fontSize = 12.sp,
             lineHeight = 18.sp
         )
+        OutlinedButton(onClick = onRetry) { Text("Оновити каталог") }
     }
 }
 
@@ -481,6 +479,8 @@ fun WineCardApp() {
                 WineDetailsScreen(
                     wine = id?.let { catalogViewModel.findWineById(it) },
                     isLoading = catalogViewModel.uiState.isLoading,
+                    error = catalogViewModel.uiState.error,
+                    onRetry = catalogViewModel::refresh,
                     onBackClick = { navController.popBackStack() }
                 )
             }

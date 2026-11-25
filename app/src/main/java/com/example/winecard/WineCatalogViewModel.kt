@@ -9,6 +9,10 @@ import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
+import android.app.Application
+import android.net.ConnectivityManager
+import android.net.NetworkCapabilities
+import androidx.lifecycle.AndroidViewModel
 
 data class WineRating(val average: String, val reviews: String)
 data class Wine(
@@ -23,13 +27,13 @@ data class WineCatalogUiState(
     val categories: List<String> = wineCategories,
     val wines: List<Wine> = emptyList(),
     val isLoading: Boolean = true,
-    val hasError: Boolean = false
+    val error: WineLoadError? = null
 ) {
     val filteredWines: List<Wine>
         get() = if (selectedCategory == "Усі") wines else wines.filter { it.category == selectedCategory }
 }
 
-class WineCatalogViewModel(private val savedStateHandle: SavedStateHandle) : ViewModel() {
+class WineCatalogViewModel(application: Application, private val savedStateHandle: SavedStateHandle) : AndroidViewModel(application) {
     var uiState by mutableStateOf(WineCatalogUiState(
         selectedCategory = savedStateHandle.get<String>("selectedCategory")
             ?.takeIf { it in wineCategories } ?: "Усі"
@@ -51,15 +55,19 @@ class WineCatalogViewModel(private val savedStateHandle: SavedStateHandle) : Vie
     fun refresh() {
         loadingJob?.cancel()
         val category = uiState.selectedCategory
-        uiState = uiState.copy(wines = emptyList(), isLoading = true, hasError = false)
+        uiState = uiState.copy(wines = emptyList(), isLoading = true, error = null)
         loadingJob = viewModelScope.launch {
             try {
+                if (!hasNetworkConnection(getApplication())) {
+                    uiState = uiState.copy(isLoading = false, error = WineLoadError.NoNetwork)
+                    return@launch
+                }
                 val wines = loadWines(category)
                 uiState = uiState.copy(wines = wines, isLoading = false)
             } catch (cancel: CancellationException) {
                 throw cancel
             } catch (error: Exception) {
-                uiState = uiState.copy(isLoading = false, hasError = true)
+                uiState = uiState.copy(isLoading = false, error = classifyWineError(error, hasNetworkConnection(getApplication())))
             }
         }
     }

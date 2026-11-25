@@ -19,7 +19,7 @@ import androidx.compose.ui.unit.sp
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun WineDetailsScreen(wine: Wine?, isLoading: Boolean = false, onBackClick: () -> Unit) {
+fun WineDetailsScreen(wine: Wine?, isLoading: Boolean = false, error: WineLoadError? = null, onRetry: () -> Unit = {}, onBackClick: () -> Unit) {
     Scaffold(
         containerColor = WineBackground,
         topBar = {
@@ -46,6 +46,8 @@ fun WineDetailsScreen(wine: Wine?, isLoading: Boolean = false, onBackClick: () -
         ) {
             if (isLoading) {
                 CircularProgressIndicator(color = WineBurgundy)
+            } else if (error != null) {
+                WineErrorContent(error, onRetry)
             } else if (wine == null) {
                 Text("Вино не знайдено", fontSize = 24.sp, color = WineInk,
                     fontWeight = FontWeight.SemiBold)

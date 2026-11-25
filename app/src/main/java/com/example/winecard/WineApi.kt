@@ -8,9 +8,11 @@ import okhttp3.MediaType.Companion.toMediaType
 import retrofit2.Retrofit
 import retrofit2.converter.kotlinx.serialization.asConverterFactory
 import retrofit2.http.GET
-import retrofit2.http.Path
 import kotlinx.coroutines.CancellationException
 import retrofit2.http.Url
+import kotlinx.serialization.SerializationException
+import retrofit2.HttpException
+import java.io.IOException
 
 @Serializable
 data class WineRatingDto(val average: JsonPrimitive? = null, val reviews: JsonPrimitive? = null)
@@ -50,18 +52,18 @@ internal fun WineDto.toWine(category: String): Wine? {
 
 @Serializable
 data class WineDatasetDto(
-    val reds: List<WineDto> = emptyList(),
-    val whites: List<WineDto> = emptyList(),
-    val rose: List<WineDto> = emptyList(),
-    val sparkling: List<WineDto> = emptyList()
+    val reds: List<WineDto>? = null,
+    val whites: List<WineDto>? = null,
+    val rose: List<WineDto>? = null,
+    val sparkling: List<WineDto>? = null
 ) {
-    fun category(endpoint: String): List<WineDto> = when (endpoint) {
+    fun category(endpoint: String): List<WineDto> = (when (endpoint) {
         "reds" -> reds
         "whites" -> whites
         "rose" -> rose
         "sparkling" -> sparkling
-        else -> emptyList()
-    }
+        else -> null
+    }) ?: throw SerializationException("Missing category: $endpoint")
 }
 
 interface WineApi {
@@ -88,10 +90,21 @@ internal suspend fun loadWines(category: String, api: WineApi = WineNetwork.api)
     } catch (cancel: CancellationException) {
         throw cancel
     } catch (error: Exception) {
-        api.getDataset(WINE_DATA_MIRROR)
+        try {
+            api.getDataset(WINE_DATA_MIRROR)
+        } catch (cancel: CancellationException) {
+            throw cancel
+        } catch (mirror: Exception) {
+            // Preserve a more informative response error if the mirror cannot connect.
+            if (mirror is IOException && (error is HttpException || error is SerializationException)) throw error
+            throw mirror
+        }
     }
     val endpoints = if (category == "Усі") wineEndpoints else wineEndpoints.filterKeys { it == category }
     return endpoints.flatMap { (label, endpoint) ->
-        dataset.category(endpoint).mapNotNull { it.toWine(label) }
+        val rows = dataset.category(endpoint)
+        val wines = rows.mapNotNull { it.toWine(label) }
+        if (rows.isNotEmpty() && wines.isEmpty()) throw SerializationException("No valid wine IDs")
+        wines
     }.distinctBy { it.id }
 }
