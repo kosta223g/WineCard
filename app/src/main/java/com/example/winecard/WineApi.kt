@@ -80,9 +80,9 @@ object WineNetwork {
     val api: WineApi = retrofit.create(WineApi::class.java)
 }
 
-// Original upstream dataset, pinned for reproducibility. No bundled wine data.
-internal const val WINE_DATA_URL = "https://raw.githubusercontent.com/jermbo/SampleAPIs/ebb3f290ad83447e1c503998eaab8bcb4bfafc08/server/api/wines.json"
-internal const val WINE_DATA_MIRROR = "https://cdn.jsdelivr.net/gh/jermbo/SampleAPIs@ebb3f290ad83447e1c503998eaab8bcb4bfafc08/server/api/wines.json"
+// Curated SampleAPIs dataset hosted remotely; no bundled wine data.
+internal const val WINE_DATA_URL = "https://raw.githubusercontent.com/kosta223g/WineCard/main/data/wines.json"
+internal const val WINE_DATA_MIRROR = "https://cdn.jsdelivr.net/gh/kosta223g/WineCard@main/data/wines.json"
 
 internal suspend fun loadWines(category: String, api: WineApi = WineNetwork.api): List<Wine> {
     val dataset = try {
