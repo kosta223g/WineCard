@@ -126,7 +126,7 @@ internal fun WineCard(wine: Wine, onClick: () -> Unit) {
                 )
                 Spacer(modifier = Modifier.width(7.dp))
                 Text(
-                    text = wine.rating.reviews,
+                    text = "Демо-рейтинг",
                     color = WineMuted,
                     fontSize = 9.sp,
                     maxLines = 1,

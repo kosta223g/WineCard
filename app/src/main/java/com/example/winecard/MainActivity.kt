@@ -229,7 +229,7 @@ fun WineCatalogScreen(
                 }
             }
             item(key = "catalog-footer", contentType = "footer") {
-                Text("Дані SampleAPIs · лабораторна робота №9", color = WineMuted,
+                Text("Дані SampleAPIs · демонстраційні рейтинги · лабораторна робота №9", color = WineMuted,
                     fontSize = 10.sp, modifier = Modifier.padding(vertical = 12.dp))
             }
         }

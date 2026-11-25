@@ -60,13 +60,13 @@ fun WineDetailsScreen(wine: Wine?, isLoading: Boolean = false, error: WineLoadEr
                 Text(wine.wine, color = WineInk, fontSize = 32.sp, lineHeight = 38.sp,
                     fontFamily = FontFamily.Serif, fontWeight = FontWeight.SemiBold)
                 Text(wine.winery, color = WineMuted, fontSize = 16.sp)
-                Text("★ ${wine.rating.average} · ${wine.rating.reviews}",
+                Text("★ ${wine.rating.average} · Демо-рейтинг",
                     color = WineGold, fontWeight = FontWeight.Bold)
                 WineDetailSection("Регіон", wine.location)
                 WineDetailSection("Виробник", wine.winery)
-                WineDetailSection("Кількість оцінок", wine.rating.reviews)
+                WineDetailSection("Кількість оцінок у джерелі", wine.rating.reviews)
                 WineDetailSection("ID у джерелі", wine.apiId.toString())
-                Text("Джерело: SampleAPIs. Зображення будуть підключені в роботі №10.",
+                Text("Джерело: SampleAPIs. Рейтинг демонстраційний. Зображення будуть підключені в роботі №10.",
                     color = WineMuted, fontSize = 12.sp, lineHeight = 18.sp)
             }
         }
