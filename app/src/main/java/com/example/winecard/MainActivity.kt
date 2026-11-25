@@ -31,6 +31,14 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.platform.LocalContext
+import kotlinx.coroutines.launch
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -60,11 +68,13 @@ internal val WineGold = Color(0xFFB6813F)
 @Composable
 fun WineCatalogScreen(
     onItemClick: (Int) -> Unit,
+    onSettingsClick: () -> Unit,
+    sortByRating: Boolean,
     viewModel: WineCatalogViewModel
 ) {
     val uiState = viewModel.uiState
     val selectedCategory = uiState.selectedCategory
-    val filteredWines = uiState.filteredWines
+    val filteredWines = sortCatalogWines(uiState.filteredWines, sortByRating)
 
     Scaffold(
         containerColor = WineBackground,
@@ -88,13 +98,17 @@ fun WineCatalogScreen(
                     }
                 },
                 actions = {
+                    IconButton(onClick = onSettingsClick) {
+                        Icon(painter = painterResource(R.drawable.ic_wine_settings),
+                            contentDescription = "Налаштування", tint = WineBurgundy)
+                    }
                     Surface(
                         shape = RoundedCornerShape(50),
                         color = Color(0xFFF0E7DF),
                         modifier = Modifier.padding(end = 18.dp)
                     ) {
                         Text(
-                            text = "№ 05",
+                            text = "№ 06",
                             modifier = Modifier.padding(horizontal = 13.dp, vertical = 8.dp),
                             color = WineBurgundy,
                             fontSize = 11.sp,
@@ -187,6 +201,11 @@ fun WineCatalogScreen(
                 )
             }
 
+            Spacer(modifier = Modifier.height(6.dp))
+            Text(
+                text = if (sortByRating) "Сортування: від найвищого рейтингу" else "Сортування: порядок каталогу",
+                color = WineMuted, fontSize = 12.sp
+            )
             Spacer(modifier = Modifier.height(14.dp))
 
             if (filteredWines.isEmpty()) {
@@ -217,7 +236,7 @@ fun WineCatalogScreen(
                 )
                 Spacer(modifier = Modifier.width(8.dp))
                 Text(
-                    text = "Демонстраційний каталог · лабораторна робота №5",
+                    text = "Демонстраційний каталог · лабораторна робота №6",
                     color = WineMuted,
                     fontSize = 10.sp
                 )
@@ -449,16 +468,33 @@ fun WineCardApp() {
         // Activity-scoped ViewModel survives navigation and rotation.
         val catalogViewModel: WineCatalogViewModel = viewModel()
         val navController = rememberNavController()
+        val context = LocalContext.current.applicationContext
+        val settings = remember(context) { WineSettingsRepository(context) }
+        val sortByRating by settings.sortByRating.collectAsState(initial = null)
+        val scope = rememberCoroutineScope()
 
         NavHost(navController = navController, startDestination = "catalog") {
             composable("catalog") {
                 WineCatalogScreen(
                     viewModel = catalogViewModel,
+                    sortByRating = sortByRating ?: DEFAULT_SORT_BY_RATING,
+                    onSettingsClick = {
+                        navController.navigate("settings") { launchSingleTop = true }
+                    },
                     onItemClick = { id ->
                         navController.navigate("details/$id") {
                             launchSingleTop = true
                         }
                     }
+                )
+            }
+            composable("settings") {
+                WineSettingsScreen(
+                    sortByRating = sortByRating,
+                    onSortChanged = { enabled ->
+                        scope.launch { settings.setSortByRating(enabled) }
+                    },
+                    onBackClick = { navController.popBackStack() }
                 )
             }
             composable(
