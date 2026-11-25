@@ -1,6 +1,5 @@
 package com.example.winecard
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
@@ -20,7 +19,7 @@ import androidx.compose.ui.unit.sp
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun WineDetailsScreen(wine: Wine?, onBackClick: () -> Unit) {
+fun WineDetailsScreen(wine: Wine?, isLoading: Boolean = false, onBackClick: () -> Unit) {
     Scaffold(
         containerColor = WineBackground,
         topBar = {
@@ -45,24 +44,15 @@ fun WineDetailsScreen(wine: Wine?, onBackClick: () -> Unit) {
                 .padding(20.dp),
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
-            if (wine == null) {
+            if (isLoading) {
+                CircularProgressIndicator(color = WineBurgundy)
+            } else if (wine == null) {
                 Text("Вино не знайдено", fontSize = 24.sp, color = WineInk,
                     fontWeight = FontWeight.SemiBold)
                 Text("Цієї позиції немає в каталозі. Повернися до списку та обери інше вино.",
                     color = WineMuted)
                 OutlinedButton(onClick = onBackClick) { Text("До каталогу") }
             } else {
-                Box(
-                    modifier = Modifier.fillMaxWidth().height(250.dp)
-                        .clip(RoundedCornerShape(24.dp)).background(Color(0xFFEDE0D6)),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Image(
-                        painter = painterResource(wineImageResource(wine.image)),
-                        contentDescription = "Пляшка вина ${wine.wine}",
-                        modifier = Modifier.fillMaxHeight().padding(20.dp)
-                    )
-                }
                 Text(wine.category.uppercase(), color = WineBurgundy,
                     fontWeight = FontWeight.Bold, letterSpacing = 2.sp, fontSize = 12.sp)
                 Text(wine.wine, color = WineInk, fontSize = 32.sp, lineHeight = 38.sp,
@@ -71,10 +61,10 @@ fun WineDetailsScreen(wine: Wine?, onBackClick: () -> Unit) {
                 Text("★ ${wine.rating.average} · ${wine.rating.reviews}",
                     color = WineGold, fontWeight = FontWeight.Bold)
                 WineDetailSection("Регіон", wine.location)
-                WineDetailSection("Сорт винограду", wine.grapes)
-                WineDetailSection("Типовий смаковий профіль", wine.taste)
-                WineDetailSection("З чим поєднувати", wine.pairing)
-                Text("Демонстраційні характеристики та ілюстрація. Смакові нотки є орієнтовними, а не перевіреними даними виробника.",
+                WineDetailSection("Виробник", wine.winery)
+                WineDetailSection("Кількість оцінок", wine.rating.reviews)
+                WineDetailSection("ID у джерелі", wine.apiId.toString())
+                Text("Джерело: SampleAPIs. Зображення будуть підключені в роботі №10.",
                     color = WineMuted, fontSize = 12.sp, lineHeight = 18.sp)
             }
         }

@@ -3,7 +3,6 @@ package com.example.winecard
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.background
 import androidx.compose.foundation.horizontalScroll
@@ -21,7 +20,10 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.verticalScroll
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FilterChip
 import androidx.compose.material3.FilterChipDefaults
@@ -108,7 +110,7 @@ fun WineCatalogScreen(
                         modifier = Modifier.padding(end = 18.dp)
                     ) {
                         Text(
-                            text = "№ 06",
+                            text = "№ 07",
                             modifier = Modifier.padding(horizontal = 13.dp, vertical = 8.dp),
                             color = WineBurgundy,
                             fontSize = 11.sp,
@@ -123,14 +125,13 @@ fun WineCatalogScreen(
             )
         }
     ) { innerPadding ->
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(innerPadding)
-                .verticalScroll(rememberScrollState())
-                .padding(horizontal = 20.dp)
-                .padding(bottom = 28.dp)
+        LazyColumn(
+            modifier = Modifier.fillMaxSize().padding(innerPadding).padding(horizontal = 20.dp),
+            contentPadding = androidx.compose.foundation.layout.PaddingValues(bottom = 28.dp),
+            verticalArrangement = Arrangement.spacedBy(13.dp)
         ) {
+            item {
+                Column {
             Spacer(modifier = Modifier.height(22.dp))
 
             Text(
@@ -208,38 +209,28 @@ fun WineCatalogScreen(
             )
             Spacer(modifier = Modifier.height(14.dp))
 
-            if (filteredWines.isEmpty()) {
-                EmptyWineResults()
-            } else {
-                filteredWines.forEachIndexed { index, wine ->
-                    WineCard(wine = wine, onClick = { onItemClick(wine.id) })
-                    if (index != filteredWines.lastIndex) {
-                        Spacer(modifier = Modifier.height(13.dp))
-                    }
                 }
             }
-
-            Spacer(modifier = Modifier.height(20.dp))
-
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(top = 4.dp),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.Center
-            ) {
-                Box(
-                    modifier = Modifier
-                        .size(5.dp)
-                        .clip(CircleShape)
-                        .background(WineGold)
-                )
-                Spacer(modifier = Modifier.width(8.dp))
-                Text(
-                    text = "Демонстраційний каталог · лабораторна робота №6",
-                    color = WineMuted,
-                    fontSize = 10.sp
-                )
+            when {
+                uiState.isLoading -> item {
+                    Box(Modifier.fillMaxWidth().padding(24.dp), contentAlignment = Alignment.Center) {
+                        CircularProgressIndicator(color = WineBurgundy)
+                    }
+                }
+                uiState.hasError -> item {
+                    Column(Modifier.fillMaxWidth().padding(16.dp), horizontalAlignment = Alignment.CenterHorizontally) {
+                        Text("Не вдалося завантажити вина. Перевір інтернет.", color = WineInk)
+                        OutlinedButton(onClick = viewModel::refresh) { Text("Повторити") }
+                    }
+                }
+                filteredWines.isEmpty() -> item { EmptyWineResults() }
+                else -> items(filteredWines, key = { it.id }) { wine ->
+                    WineCard(wine = wine, onClick = { onItemClick(wine.id) })
+                }
+            }
+            item {
+                Text("Дані SampleAPIs · лабораторна робота №7", color = WineMuted,
+                    fontSize = 10.sp, modifier = Modifier.padding(vertical = 12.dp))
             }
         }
     }
@@ -354,13 +345,7 @@ private fun WineCard(wine: Wine, onClick: () -> Unit) {
                 ),
             contentAlignment = Alignment.Center
         ) {
-            Image(
-                painter = painterResource(id = wineImageResource(wine.image)),
-                contentDescription = "Пляшка вина ${wine.wine}",
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(horizontal = 13.dp, vertical = 8.dp)
-            )
+            Text("🍷", fontSize = 28.sp, color = WineBurgundy)
 
             Surface(
                 modifier = Modifier
@@ -453,15 +438,6 @@ private fun WineCard(wine: Wine, onClick: () -> Unit) {
     }
 }
 
-internal fun wineImageResource(image: String): Int {
-    return when (image) {
-        "wine_cabernet" -> R.drawable.wine_cabernet
-        "wine_pinot" -> R.drawable.wine_pinot
-        "wine_malbec" -> R.drawable.wine_malbec
-        else -> R.drawable.wine_cabernet
-    }
-}
-
 @Composable
 fun WineCardApp() {
     WineCardTheme {
@@ -504,6 +480,7 @@ fun WineCardApp() {
                 val id = entry.arguments?.getInt("id")
                 WineDetailsScreen(
                     wine = id?.let { catalogViewModel.findWineById(it) },
+                    isLoading = catalogViewModel.uiState.isLoading,
                     onBackClick = { navController.popBackStack() }
                 )
             }
