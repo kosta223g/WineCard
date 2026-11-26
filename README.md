@@ -201,6 +201,48 @@
 - Векторна іконка WineCard і системний splash через AndroidX Core SplashScreen.
 - Ручна перевірка: перемкнути тему в налаштуваннях WineCard, відкрити всі екрани, порожній погріб, пошук без збігів, помилку мережі; перевірити холодний запуск. Реальний запуск необхідно перевірити в Android Studio.
 
+## Лабораторна робота №14
+
+**Тема:** Полірування застосунку та фінальна збірка.
+
+- Версія 1.0.0, versionCode 14, targetSdk 37 (чинний мінімум Google Play — 36).
+- Release оптимізація R8, локальна конфігурація підпису, виключення приватних ключів із Git.
+- Виправлення стану добірки при відновленні, обробка помилки читання сховища, відступи вкладених Scaffold, видалення номера лабораторної з інтерфейсу.
+- [Матеріали сторінки магазину](release-materials/store-listing.md), [чекліст](release-materials/checklist.md), [план скріншотів](screenshots/README.md).
+- Підписання, збірка, встановлення та реальні скріншоти виконуються локально; їхній результат не підтверджено автоматично.
+
+## Як зібрати
+
+Потрібні Android Studio, SDK 37 і JDK, сумісний із Gradle wrapper проєкту.
+Для debug достатньо стандартного local.properties з sdk.dir.
+
+1. Створіть приватний ключ поза репозиторієм через Android Studio (Build → Generate Signed Bundle / APK → Create new), validity 30 years, alias winecard.
+2. У кореневому local.properties додайте (приклад для Windows, використовуйте прямі слеші):
+
+```properties
+sdk.dir=C:/Users/YOUR_USER/AppData/Local/Android/Sdk
+release.storeFile=C:/Users/YOUR_USER/PrivateKeys/winecard.jks
+release.storePassword=YOUR_PRIVATE_PASSWORD
+release.keyAlias=winecard
+release.keyPassword=YOUR_PRIVATE_KEY_PASSWORD
+```
+
+Не публікуйте справжні значення. local.properties та файли ключів ігноруються Git. Не зберігайте ключ у папці проєкту.
+
+3. У терміналі Windows:
+
+```powershell
+.\gradlew.bat testDebugUnitTest lintRelease assembleRelease bundleRelease
+```
+
+Результати: app/build/outputs/apk/release/ (APK), app/build/outputs/bundle/release/ (AAB), app/build/outputs/mapping/release/mapping.txt (R8). Збережіть усі три файли поза Git для цієї версії.
+4. Встановіть APK на телефон. Якщо вже встановлено debug із іншим підписом, видаліть його (це видаляє локальні налаштування). Закрийте Android Studio, відкрийте застосунок із лаунчера й пройдіть [чекліст](release-materials/checklist.md).
+
+
+## Скріншоти
+
+[План реальних скріншотів release](screenshots/README.md). Макети дизайну доступні в папці design; вони не є скріншотами встановленого застосунку.
+
 ## Використання штучного інтелекту
 
-Під час виконання лабораторних робіт №2, №3, №4, №5, №6, №7, №8, №9, №10, №11, №12 та №13 використано ChatGPT (OpenAI) для допомоги зі структурою Kotlin-коду, версткою Jetpack Compose, створенням векторних drawable-ресурсів, реалізацією фільтрації, перенесенням стану у ViewModel, навігацією, екраном деталей, DataStore, налаштуваннями, підключенням API, оптимізацією каталогу, пошуком та документацією змін. Код і результат запуску потрібно перевірити в Android Studio.
+Під час виконання лабораторних робіт №2, №3, №4, №5, №6, №7, №8, №9, №10, №11, №12, №13 та №14 використано ChatGPT (OpenAI) для допомоги зі структурою Kotlin-коду, версткою Jetpack Compose, створенням векторних drawable-ресурсів, реалізацією фільтрації, перенесенням стану у ViewModel, навігацією, екраном деталей, DataStore, налаштуваннями, підключенням API, оптимізацією каталогу, пошуком та документацією змін. Код і результат запуску потрібно перевірити в Android Studio.

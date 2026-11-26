@@ -32,6 +32,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
@@ -148,7 +149,7 @@ fun WineCatalogScreen(
                         modifier = Modifier.padding(end = 18.dp)
                     ) {
                         Text(
-                            text = "№ 13",
+                            text = "1.0.0",
                             modifier = Modifier.padding(horizontal = 13.dp, vertical = 8.dp),
                             color = WineBurgundy,
                             style = MaterialTheme.typography.labelMedium
@@ -314,7 +315,7 @@ fun WineCatalogScreen(
                 }
             }
             item(key = "catalog-footer", contentType = "footer") {
-                Text("Дані SampleAPIs · демонстраційні рейтинги · лабораторна робота №13", color = WineMuted,
+                Text("Дані SampleAPIs · демонстраційні рейтинги", color = WineMuted,
                     style = MaterialTheme.typography.labelSmall, modifier = Modifier.padding(vertical = 12.dp))
             }
         }
@@ -416,7 +417,8 @@ private fun EmptyWineResults(onRetry: () -> Unit) {
 fun WineCardApp() {
     val context = LocalContext.current.applicationContext
     val settings = remember(context) { WineSettingsRepository(context) }
-    val themeMode by settings.themeMode.collectAsState(initial = WineThemeMode.SYSTEM)
+    val storedTheme by settings.themeMode.collectAsState(initial = null)
+    val themeMode = storedTheme ?: WineThemeMode.SYSTEM
     val systemDark = isSystemInDarkTheme()
     val darkTheme = when (themeMode) {
         WineThemeMode.SYSTEM -> systemDark
@@ -446,6 +448,9 @@ fun WineCardApp() {
         val entry by navController.currentBackStackEntryAsState()
         val route = entry?.destination?.route
         val snackbar = remember { SnackbarHostState() }
+        LaunchedEffect(route, favoriteIds) {
+            if (route?.startsWith("cellar-details/") == true && favoriteIds != null && !cellarViewModel.hasLoadedOrLoading) cellarViewModel.refresh()
+        }
         LaunchedEffect(cellarViewModel) {
             cellarViewModel.messages.collect { snackbar.showSnackbar(it) }
         }
@@ -473,7 +478,7 @@ fun WineCardApp() {
                 }
             }
         ) { outerPadding ->
-            NavHost(navController = navController, startDestination = "catalog", modifier = Modifier.padding(outerPadding)) {
+            NavHost(navController = navController, startDestination = "catalog", modifier = Modifier.padding(outerPadding).consumeWindowInsets(outerPadding)) {
                 composable("catalog") {
                     WineCatalogScreen(
                         viewModel = catalogViewModel,

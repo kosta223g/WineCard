@@ -1,8 +1,17 @@
+import java.util.Properties
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.kotlin.serialization)
 }
+
+val local = Properties().apply {
+    val source = rootProject.file("local.properties")
+    if (source.isFile) source.inputStream().use { load(it) }
+}
+val releaseKeys = listOf("release.storeFile", "release.storePassword", "release.keyAlias", "release.keyPassword")
+val hasReleaseSigning = releaseKeys.all { !local.getProperty(it).isNullOrBlank() }
 
 android {
     namespace = "com.example.winecard"
@@ -14,17 +23,29 @@ android {
         applicationId = "com.example.winecard"
         minSdk = 24
         targetSdk = 37
-        versionCode = 1
-        versionName = "1.0"
+        versionCode = 14
+        versionName = "1.0.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
+    signingConfigs {
+        if (hasReleaseSigning) {
+            create("localRelease") {
+                storeFile = rootProject.file(local.getProperty("release.storeFile"))
+                storePassword = local.getProperty("release.storePassword")
+                keyAlias = local.getProperty("release.keyAlias")
+                keyPassword = local.getProperty("release.keyPassword")
+            }
+        }
+    }
     buildTypes {
         release {
             optimization {
-                enable = false
+                enable = true
             }
+            proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
+            if (hasReleaseSigning) signingConfig = signingConfigs.getByName("localRelease")
         }
     }
     compileOptions {
@@ -62,4 +83,12 @@ dependencies {
     androidTestImplementation(libs.androidx.junit)
     debugImplementation(libs.androidx.compose.ui.test.manifest)
     debugImplementation(libs.androidx.compose.ui.tooling)
+}
+
+// Fail rather than silently distribute an unsigned release. Debug builds need no private key.
+tasks.matching { it.name in setOf("assembleRelease", "bundleRelease", "packageRelease", "packageReleaseBundle", "signReleaseBundle") }.configureEach {
+    doFirst {
+        check(hasReleaseSigning) { "Configure the four release.* properties in local.properties before building release." }
+        check(rootProject.file(local.getProperty("release.storeFile")).isFile) { "Release keystore does not exist." }
+    }
 }

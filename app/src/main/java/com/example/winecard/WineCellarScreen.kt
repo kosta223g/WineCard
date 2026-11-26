@@ -49,10 +49,13 @@ internal fun WineCellarScreen(viewModel: WineCellarViewModel, onCatalogClick: ()
                 Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
                     Text("ОСОБИСТА КОЛЕКЦІЯ", color = WineBurgundy, style = MaterialTheme.typography.labelMedium)
                     Text("Твої улюблені вина", color = WineInk, style = MaterialTheme.typography.headlineMedium)
-                    Text("Збережено: ${ids?.size ?: 0}", color = WineMuted)
+                    Text(ids?.let { "Збережено: ${it.size}" } ?: "Завантаження…", color = WineMuted)
                 }
             }
             when {
+                viewModel.storageError -> item(key = "cellar-storage-error") {
+                    Text("Не вдалося прочитати збережені вина. Перезапусти застосунок.", color = MaterialTheme.colorScheme.error)
+                }
                 ids == null || state.isLoading -> item(key = "cellar-loading") {
                     Box(Modifier.fillMaxWidth().padding(24.dp), contentAlignment = Alignment.Center) {
                         CircularProgressIndicator(color = WineBurgundy)

@@ -31,15 +31,20 @@ class WineCellarViewModel(application: Application) : AndroidViewModel(applicati
         private set
     private var job: Job? = null
     private var opened = false
+    private var loaded = false
+    val hasLoadedOrLoading: Boolean get() = loaded || uiState.isLoading || uiState.error != null
+    var storageError by mutableStateOf(false)
+        private set
 
     init {
         viewModelScope.launch {
             try {
                 repository.favoriteIds.collect { ids ->
+                    val previous = _favoriteIds.value
                     _favoriteIds.value = ids
                     if (opened) {
                         // Removed items disappear immediately. Newly selected IDs need a fresh response.
-                        if (!uiState.isLoading && ids.all { id -> uiState.wines.any { it.id == id } }) {
+                        if (previous != null && loaded && !uiState.isLoading && ids.all { id -> uiState.wines.any { it.id == id } }) {
                             if (ids.isEmpty()) uiState = uiState.copy(error = null)
                         } else refresh()
                     }
@@ -47,6 +52,7 @@ class WineCellarViewModel(application: Application) : AndroidViewModel(applicati
             } catch (cancel: CancellationException) {
                 throw cancel
             } catch (error: Exception) {
+                storageError = true
                 _messages.emit("Не вдалося прочитати обране")
             }
         }
@@ -65,6 +71,7 @@ class WineCellarViewModel(application: Application) : AndroidViewModel(applicati
         job?.cancel()
         val ids = _favoriteIds.value ?: return
         if (ids.isEmpty()) {
+            loaded = true
             uiState = WineCellarUiState()
             return
         }
@@ -76,6 +83,7 @@ class WineCellarViewModel(application: Application) : AndroidViewModel(applicati
                     return@launch
                 }
                 val wines = loadFavoriteWines(ids)
+                loaded = true
                 uiState = WineCellarUiState(wines = wines)
             } catch (cancel: CancellationException) {
                 throw cancel

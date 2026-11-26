@@ -13,3 +13,14 @@
 .externalNativeBuild
 .cxx
 local.properties
+
+# Private release signing and generated binaries
+*.jks
+*.keystore
+*.p12
+*.pfx
+**/keystore.properties
+**/signing.properties
+**/release/
+*.apk
+*.aab
