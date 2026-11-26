@@ -11,21 +11,10 @@
     "id": 1
   },
   {
-    "winery": "Domaine de La Romanée-Conti",
-    "wine": "Montrachet Grand Cru 2014",
-    "rating": {
-      "average": "3.2",
-      "reviews": "33 ratings"
-    },
-    "location": "France\n·\nMontrachet Grand Cru",
-    "image": "https://images.vivino.com/thumbs/rORmihtxSrKG7SfuI0bD6w_pb_x300.png",
-    "id": 2
-  },
-  {
     "winery": "Domaine Coche-Dury",
     "wine": "Meursault Les Rougeots 2001",
     "rating": {
-      "average": "3.7",
+      "average": "3.2",
       "reviews": "25 ratings"
     },
     "location": "France\n·\nMeursault",
@@ -36,7 +25,7 @@
     "winery": "Domaine Coche-Dury",
     "wine": "Corton-Charlemagne Grand Cru N.V.",
     "rating": {
-      "average": "3.9",
+      "average": "3.7",
       "reviews": "416 ratings"
     },
     "location": "France\n·\nCorton-Charlemagne Grand Cru",
@@ -47,7 +36,7 @@
     "winery": "Jarvis",
     "wine": "Estate Finch Hollow Chardonnay (Cave Fermented) 2014",
     "rating": {
-      "average": "4.5",
+      "average": "3.9",
       "reviews": "113 ratings"
     },
     "location": "United States\n·\nNapa Valley",
@@ -58,7 +47,7 @@
     "winery": "Château d'Yquem",
     "wine": "Y 1996",
     "rating": {
-      "average": "4.7",
+      "average": "4.5",
       "reviews": "96 ratings"
     },
     "location": "France\n·\nBordeaux Supérieur",
@@ -69,7 +58,7 @@
     "winery": "Domaine Leflaive",
     "wine": "Bâtard-Montrachet Grand Cru 1996",
     "rating": {
-      "average": "4.4",
+      "average": "4.7",
       "reviews": "71 ratings"
     },
     "location": "France\n·\nBâtard-Montrachet Grand Cru",
@@ -80,7 +69,7 @@
     "winery": "Joseph Drouhin",
     "wine": "Montrachet Grand Cru Marquis de Laguiche 2004",
     "rating": {
-      "average": "4.0",
+      "average": "4.4",
       "reviews": "64 ratings"
     },
     "location": "France\n·\nMontrachet Grand Cru",
@@ -88,21 +77,10 @@
     "id": 8
   },
   {
-    "winery": "Domaine Coche-Dury",
-    "wine": "Meursault Les Rougeots 2005",
-    "rating": {
-      "average": "3.1",
-      "reviews": "56 ratings"
-    },
-    "location": "France\n·\nMeursault",
-    "image": "https://images.vivino.com/thumbs/l5W5NRvZR_SzClIDSnG5Ag_pb_x300.png",
-    "id": 9
-  },
-  {
     "winery": "Olivier Leflaive",
     "wine": "Bâtard-Montrachet Grand Cru 2012",
     "rating": {
-      "average": "3.5",
+      "average": "4.0",
       "reviews": "55 ratings"
     },
     "location": "France\n·\nBâtard-Montrachet Grand Cru",
@@ -110,43 +88,10 @@
     "id": 10
   },
   {
-    "winery": "Joseph Drouhin",
-    "wine": "Montrachet Grand Cru Marquis de Laguiche 2002",
-    "rating": {
-      "average": "4.9",
-      "reviews": "44 ratings"
-    },
-    "location": "France\n·\nMontrachet Grand Cru",
-    "image": "https://images.vivino.com/thumbs/1QoFUeYqQaCU07v4MBx8yw_pb_x300.png",
-    "id": 11
-  },
-  {
-    "winery": "Domaine de La Romanée-Conti",
-    "wine": "Montrachet Grand Cru 1999",
-    "rating": {
-      "average": "3.7",
-      "reviews": "44 ratings"
-    },
-    "location": "France\n·\nMontrachet Grand Cru",
-    "image": "https://images.vivino.com/thumbs/rORmihtxSrKG7SfuI0bD6w_pb_x300.png",
-    "id": 12
-  },
-  {
-    "winery": "Domaine de La Romanée-Conti",
-    "wine": "Montrachet Grand Cru 2000",
-    "rating": {
-      "average": "3.6",
-      "reviews": "42 ratings"
-    },
-    "location": "France\n·\nMontrachet Grand Cru",
-    "image": "https://images.vivino.com/thumbs/rORmihtxSrKG7SfuI0bD6w_pb_x300.png",
-    "id": 13
-  },
-  {
     "winery": "M. Chapoutier",
     "wine": "Ermitage de l'Orée 2004",
     "rating": {
-      "average": "4.5",
+      "average": "3.1",
       "reviews": "41 ratings"
     },
     "location": "France\n·\nHermitage",
@@ -157,7 +102,7 @@
     "winery": "Château Haut-Brion",
     "wine": "Pessac-Léognan Blanc (Grand Cru Classé de Graves) 2005",
     "rating": {
-      "average": "3.4",
+      "average": "3.5",
       "reviews": "39 ratings"
     },
     "location": "France\n·\nPessac-Léognan",
@@ -165,21 +110,10 @@
     "id": 15
   },
   {
-    "winery": "Joseph Drouhin",
-    "wine": "Montrachet Grand Cru Marquis de Laguiche 2015",
-    "rating": {
-      "average": "3.7",
-      "reviews": "38 ratings"
-    },
-    "location": "France\n·\nMontrachet Grand Cru",
-    "image": "https://images.vivino.com/thumbs/1QoFUeYqQaCU07v4MBx8yw_pb_x300.png",
-    "id": 16
-  },
-  {
     "winery": "La Grange des Pères",
     "wine": "Vin de Pays de l'Hérault Blanc 2007",
     "rating": {
-      "average": "3.3",
+      "average": "4.9",
       "reviews": "37 ratings"
     },
     "location": "France\n·\nHérault",
@@ -190,7 +124,7 @@
     "winery": "Trimbach",
     "wine": "Clos Sainte Hune Riesling Alsace 1990",
     "rating": {
-      "average": "4.0",
+      "average": "3.7",
       "reviews": "36 ratings"
     },
     "location": "France\n·\nAlsace",
@@ -199,20 +133,9 @@
   },
   {
     "winery": "Domaine Coche-Dury",
-    "wine": "Meursault Les Rougeots 2010",
-    "rating": {
-      "average": "3.8",
-      "reviews": "35 ratings"
-    },
-    "location": "France\n·\nMeursault",
-    "image": "https://images.vivino.com/thumbs/l5W5NRvZR_SzClIDSnG5Ag_pb_x300.png",
-    "id": 19
-  },
-  {
-    "winery": "Domaine Coche-Dury",
     "wine": "Corton-Charlemagne Grand Cru 2009",
     "rating": {
-      "average": "4.6",
+      "average": "3.6",
       "reviews": "34 ratings"
     },
     "location": "France\n·\nCorton-Charlemagne Grand Cru",
@@ -223,7 +146,7 @@
     "winery": "Kongsgaard",
     "wine": "The Judge Chardonnay 2012",
     "rating": {
-      "average": "3.6",
+      "average": "4.5",
       "reviews": "34 ratings"
     },
     "location": "United States\n·\nNapa Valley",
@@ -231,32 +154,10 @@
     "id": 21
   },
   {
-    "winery": "Domaine de La Romanée-Conti",
-    "wine": "Montrachet Grand Cru 1993",
-    "rating": {
-      "average": "4.2",
-      "reviews": "32 ratings"
-    },
-    "location": "France\n·\nMontrachet Grand Cru",
-    "image": "https://images.vivino.com/thumbs/rORmihtxSrKG7SfuI0bD6w_pb_x300.png",
-    "id": 22
-  },
-  {
-    "winery": "Domaine Coche-Dury",
-    "wine": "Corton-Charlemagne Grand Cru 2005",
-    "rating": {
-      "average": "4.2",
-      "reviews": "32 ratings"
-    },
-    "location": "France\n·\nCorton-Charlemagne Grand Cru",
-    "image": "https://images.vivino.com/thumbs/QIs0hHhdRHubnyUjY8U2kA_pb_x300.png",
-    "id": 23
-  },
-  {
     "winery": "Patrick Javillier",
     "wine": "Corton Charlemagne Grand Cru 2015",
     "rating": {
-      "average": "4.0",
+      "average": "3.4",
       "reviews": "32 ratings"
     },
     "location": "France\n·\nCorton-Charlemagne Grand Cru",
@@ -267,7 +168,7 @@
     "winery": "Keller",
     "wine": "G-Max Riesling 2009",
     "rating": {
-      "average": "4.2",
+      "average": "3.7",
       "reviews": "31 ratings"
     },
     "location": "Germany\n·\nRheinhessen",
@@ -278,7 +179,7 @@
     "winery": "F.X. Pichler",
     "wine": "Unendlich Riesling 2007",
     "rating": {
-      "average": "4.8",
+      "average": "3.3",
       "reviews": "31 ratings"
     },
     "location": "Austria\n·\nWachau",
@@ -286,32 +187,10 @@
     "id": 26
   },
   {
-    "winery": "Domaine Coche-Dury",
-    "wine": "Corton-Charlemagne Grand Cru 2007",
-    "rating": {
-      "average": "4.5",
-      "reviews": "30 ratings"
-    },
-    "location": "France\n·\nCorton-Charlemagne Grand Cru",
-    "image": "https://images.vivino.com/thumbs/QIs0hHhdRHubnyUjY8U2kA_pb_x300.png",
-    "id": 27
-  },
-  {
-    "winery": "Domaine Coche-Dury",
-    "wine": "Meursault Les Rougeots 2004",
-    "rating": {
-      "average": "3.9",
-      "reviews": "30 ratings"
-    },
-    "location": "France\n·\nMeursault",
-    "image": "https://images.vivino.com/thumbs/l5W5NRvZR_SzClIDSnG5Ag_pb_x300.png",
-    "id": 28
-  },
-  {
     "winery": "M. Chapoutier",
     "wine": "Ermitage Le Méal Blanc 2006",
     "rating": {
-      "average": "4.1",
+      "average": "4.0",
       "reviews": "30 ratings"
     },
     "location": "France\n·\nHermitage",
@@ -322,11 +201,132 @@
     "winery": "Château de Puligny Montrachet",
     "wine": "Chevalier-Montrachet Grand Cru 2008",
     "rating": {
-      "average": "4.3",
+      "average": "3.8",
       "reviews": "29 ratings"
     },
     "location": "France\n·\nChevalier-Montrachet Grand Cru",
     "image": "https://images.vivino.com/thumbs/mpBp_HteQAKsBo5MJ6JnMA_pb_x300.png",
     "id": 30
+  },
+  {
+    "winery": "Aubert",
+    "wine": "Chardonnay Eastside 2012",
+    "rating": {
+      "average": "4.6",
+      "reviews": "28 ratings"
+    },
+    "location": "United States\n·\nRussian River Valley",
+    "image": "https://images.vivino.com/thumbs/6JonqprfR_SMBTqliXjB7Q_pb_x300.png",
+    "id": 32
+  },
+  {
+    "winery": "Alpha Omega",
+    "wine": "Reserve Chardonnay 2014",
+    "rating": {
+      "average": "3.6",
+      "reviews": "27 ratings"
+    },
+    "location": "United States\n·\nNapa Valley",
+    "image": "https://images.vivino.com/thumbs/ZdnxhNdpTeet4bwwTdFUJA_pb_x300.png",
+    "id": 33
+  },
+  {
+    "winery": "Raveneau",
+    "wine": "Chablis Premier Cru 'Butteaux' 2001",
+    "rating": {
+      "average": "4.2",
+      "reviews": "26 ratings"
+    },
+    "location": "France\n·\nChablis 1er Cru 'Butteaux'",
+    "image": "https://images.vivino.com/thumbs/eBzMh3SOSDGAmJv0cg2vnw_pb_x300.png",
+    "id": 35
+  },
+  {
+    "winery": "Franz Hirtzberger",
+    "wine": "Singerriedel - Riesling Smaragd 2002",
+    "rating": {
+      "average": "4.2",
+      "reviews": "26 ratings"
+    },
+    "location": "Austria\n·\nWachau",
+    "image": "https://images.vivino.com/thumbs/W7Tblf6DSU6rZjeCpIkJ8Q_pb_x300.png",
+    "id": 37
+  },
+  {
+    "winery": "Louis Jadot",
+    "wine": "Bâtard-Montrachet Grand Cru 2003",
+    "rating": {
+      "average": "4.0",
+      "reviews": "25 ratings"
+    },
+    "location": "France\n·\nBâtard-Montrachet Grand Cru",
+    "image": "https://images.vivino.com/thumbs/RIMuIFwaQVa-HkHKNztfxA_pb_x300.png",
+    "id": 39
+  },
+  {
+    "winery": "Domaine des Comtes Lafon",
+    "wine": "Montrachet Grand Cru N.V.",
+    "rating": {
+      "average": "4.2",
+      "reviews": "310 ratings"
+    },
+    "location": "France\n·\nMontrachet Grand Cru",
+    "image": "https://images.vivino.com/thumbs/7NGox10_SBWN1jRRD_dCdw_pb_x300.png",
+    "id": 45
+  },
+  {
+    "winery": "Gaja",
+    "wine": "Gaia & Rey Langhe 2011",
+    "rating": {
+      "average": "4.8",
+      "reviews": "299 ratings"
+    },
+    "location": "Italy\n·\nLanghe",
+    "image": "https://images.vivino.com/thumbs/5K9sXX9CQ8eonyEU71IlDA_pb_x300.png",
+    "id": 46
+  },
+  {
+    "winery": "Marqués de Murrieta",
+    "wine": "Castillo Ygay Gran Reserva Especial Blanco 1986",
+    "rating": {
+      "average": "4.5",
+      "reviews": "254 ratings"
+    },
+    "location": "Spain\n·\nRioja",
+    "image": "https://images.vivino.com/thumbs/G3MU5UwBQ1eCX5A6CiPivg_pb_x300.png",
+    "id": 47
+  },
+  {
+    "winery": "Domaine Coche-Dury",
+    "wine": "Meursault Les Perrieres N.V.",
+    "rating": {
+      "average": "3.9",
+      "reviews": "184 ratings"
+    },
+    "location": "France\n·\nMeursault",
+    "image": "https://images.vivino.com/thumbs/iDfiF6ocQuOzhLbXXKWtPQ_pb_x300.png",
+    "id": 49
+  },
+  {
+    "winery": "Domaine Coche-Dury",
+    "wine": "Meursault Premier Cru Caillerets N.V.",
+    "rating": {
+      "average": "4.1",
+      "reviews": "151 ratings"
+    },
+    "location": "France\n·\nMeursault Premier Cru",
+    "image": "https://images.vivino.com/thumbs/dh7QiwynR8CgMU95ENU7Bg_pb_x300.png",
+    "id": 50
+  },
+  {
+    "winery": "Marcassin",
+    "wine": "Marcassin Vineyard Chardonnay 2011",
+    "rating": {
+      "average": "4.3",
+      "reviews": "118 ratings"
+    },
+    "location": "United States\n·\nSonoma Coast",
+    "image": "https://images.vivino.com/thumbs/JFRTPDUcTFiLFvtMXT-4Cg_pb_x300.png",
+    "id": 52
   }
 ]

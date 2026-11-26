@@ -11,21 +11,10 @@
     "id": 1
   },
   {
-    "winery": "Antinori",
-    "wine": "Fonte de' Medici 2011",
-    "rating": {
-      "average": "3.1",
-      "reviews": "199 ratings"
-    },
-    "location": "Italy\n·\nVino d'Italia",
-    "image": "https://images.vivino.com/highlights/icon/top_ranked.svg",
-    "id": 2
-  },
-  {
     "winery": "Minuty",
     "wine": "281 Rosé 2014",
     "rating": {
-      "average": "4.6",
+      "average": "3.1",
       "reviews": "39 ratings"
     },
     "location": "France\n·\nProvence",
@@ -36,7 +25,7 @@
     "winery": "Château Saint-Maur",
     "wine": "Clos de Capelune Côtes de Provence Rosé 2017",
     "rating": {
-      "average": "4.7",
+      "average": "4.6",
       "reviews": "34 ratings"
     },
     "location": "France\n·\nCôtes de Provence",
@@ -47,7 +36,7 @@
     "winery": "Villa M",
     "wine": "Rosé 2016",
     "rating": {
-      "average": "4.4",
+      "average": "4.7",
       "reviews": "33 ratings"
     },
     "location": "Italy\n·\nPiemonte",
@@ -55,32 +44,10 @@
     "id": 5
   },
   {
-    "winery": "Minuty",
-    "wine": "281 Rosé 2017",
-    "rating": {
-      "average": "3.2",
-      "reviews": "152 ratings"
-    },
-    "location": "France\n·\nProvence",
-    "image": "https://images.vivino.com/thumbs/CRBSmK3xRuqHdCg4TpBpVw_pb_x300.png",
-    "id": 6
-  },
-  {
-    "winery": "Castello di Amorosa",
-    "wine": "La Fantasia 2015",
-    "rating": {
-      "average": "3.8",
-      "reviews": "150 ratings"
-    },
-    "location": "United States\n·\nCalifornia",
-    "image": "https://images.vivino.com/highlights/icon/top_ranked.svg",
-    "id": 7
-  },
-  {
     "winery": "Château d'Esclans",
     "wine": "Garrus Rosé 2017",
     "rating": {
-      "average": "4.6",
+      "average": "4.4",
       "reviews": "148 ratings"
     },
     "location": "France\n·\nCôtes de Provence",
@@ -88,32 +55,10 @@
     "id": 8
   },
   {
-    "winery": "Minuty",
-    "wine": "281 Rosé 2016",
-    "rating": {
-      "average": "4.9",
-      "reviews": "147 ratings"
-    },
-    "location": "France\n·\nProvence",
-    "image": "https://images.vivino.com/thumbs/CRBSmK3xRuqHdCg4TpBpVw_pb_x300.png",
-    "id": 9
-  },
-  {
-    "winery": "Château d'Esclans",
-    "wine": "Garrus Rosé 2010",
-    "rating": {
-      "average": "4.0",
-      "reviews": "115 ratings"
-    },
-    "location": "France\n·\nCôtes de Provence",
-    "image": "https://images.vivino.com/thumbs/NGq7QIE3QwSE0cAKrvPuTA_pb_x300.png",
-    "id": 10
-  },
-  {
     "winery": "Blankiet",
     "wine": "Prince of Hearts Rosé N.V.",
     "rating": {
-      "average": "4.9",
+      "average": "3.2",
       "reviews": "77 ratings"
     },
     "location": "United States\n·\nNapa Valley",
@@ -121,21 +66,10 @@
     "id": 11
   },
   {
-    "winery": "Bodegas Vilano",
-    "wine": "Think Pink Rosado 2017",
-    "rating": {
-      "average": "3.4",
-      "reviews": "76 ratings"
-    },
-    "location": "Spain\n·\nRibera del Duero",
-    "image": "https://images.vivino.com/highlights/icon/most_user_rated.svg",
-    "id": 12
-  },
-  {
     "winery": "Domaine Sainte Lucie",
     "wine": "L'Hydropathe Elite Rosé 2018",
     "rating": {
-      "average": "3.5",
+      "average": "3.8",
       "reviews": "59 ratings"
     },
     "location": "France\n·\nCôtes de Provence",
@@ -146,7 +80,7 @@
     "winery": "Château Simone",
     "wine": "Palette Rose 2016",
     "rating": {
-      "average": "4.5",
+      "average": "4.6",
       "reviews": "58 ratings"
     },
     "location": "France\n·\nPalette",
@@ -157,7 +91,7 @@
     "winery": "Domaines Ott",
     "wine": "Château Romassan Rosé (Coeur de Grain) 2010",
     "rating": {
-      "average": "4.1",
+      "average": "4.9",
       "reviews": "40 ratings"
     },
     "location": "France\n·\nBandol",
@@ -168,7 +102,7 @@
     "winery": "Château La Sauvageonne",
     "wine": "La Villa Rosé 2015",
     "rating": {
-      "average": "4.1",
+      "average": "4.0",
       "reviews": "40 ratings"
     },
     "location": "France\n·\nLanguedoc",
@@ -179,7 +113,7 @@
     "winery": "Le Coste",
     "wine": "Rosato 2017",
     "rating": {
-      "average": "4.7",
+      "average": "4.9",
       "reviews": "39 ratings"
     },
     "location": "Italy\n·\nLazio",
@@ -190,7 +124,7 @@
     "winery": "Château Sainte Marguerite",
     "wine": "Fantastique Rosé 2017",
     "rating": {
-      "average": "4.7",
+      "average": "3.4",
       "reviews": "35 ratings"
     },
     "location": "France\n·\nCôtes de Provence",
@@ -201,7 +135,7 @@
     "winery": "Cakebread",
     "wine": "Vin De Porche Rosé 2017",
     "rating": {
-      "average": "3.3",
+      "average": "3.5",
       "reviews": "32 ratings"
     },
     "location": "United States\n·\nAnderson Valley",
@@ -209,43 +143,10 @@
     "id": 19
   },
   {
-    "winery": "Fratelli Vogadori",
-    "wine": "Molinara Rosato 2013",
-    "rating": {
-      "average": "4.8",
-      "reviews": "30 ratings"
-    },
-    "location": "Italy\n·\nValpolicella",
-    "image": "https://images.vivino.com/highlights/icon/most_user_rated.svg",
-    "id": 20
-  },
-  {
-    "winery": "Bartenura",
-    "wine": "Malvasia di Casorzo 2017",
-    "rating": {
-      "average": "4.4",
-      "reviews": "30 ratings"
-    },
-    "location": "Italy\n·\nMalvasia di Casorzo d'Asti",
-    "image": "https://images.vivino.com/thumbs/sJd7QpiATmqtzQq3xwcvpg_pb_x300.png",
-    "id": 21
-  },
-  {
-    "winery": "Antica Terra",
-    "wine": "Angelicall Rosé 2013",
-    "rating": {
-      "average": "3.9",
-      "reviews": "29 ratings"
-    },
-    "location": "United States\n·\nWillamette Valley",
-    "image": "https://images.vivino.com/thumbs/LRmcfSasTD22xR6lRSKcIw_pb_x300.png",
-    "id": 22
-  },
-  {
     "winery": "Batič",
     "wine": "Rosé 2013",
     "rating": {
-      "average": "4.1",
+      "average": "4.5",
       "reviews": "29 ratings"
     },
     "location": "Slovenia\n·\nVipava",
@@ -253,32 +154,10 @@
     "id": 23
   },
   {
-    "winery": "Domaine Serisier",
-    "wine": "Bordeaux Rosé 2012",
-    "rating": {
-      "average": "3.3",
-      "reviews": "27 ratings"
-    },
-    "location": "France\n·\nBordeaux",
-    "image": "https://images.vivino.com/highlights/icon/top_ranked.svg",
-    "id": 24
-  },
-  {
-    "winery": "Monte da Ravasqueira",
-    "wine": "Touriga Nacional 2010",
-    "rating": {
-      "average": "3.6",
-      "reviews": "26 ratings"
-    },
-    "location": "Portugal\n·\nAlentejano",
-    "image": "https://images.vivino.com/thumbs/mE9if7kSTWOjfGBiV5T5CA_pb_x300.png",
-    "id": 25
-  },
-  {
     "winery": "Weingut A. Diehl",
     "wine": "Eins Zu Eins Merlot Rosé 2016",
     "rating": {
-      "average": "3.4",
+      "average": "4.1",
       "reviews": "25 ratings"
     },
     "location": "Germany\n·\nPfalz",
@@ -286,47 +165,168 @@
     "id": 26
   },
   {
-    "winery": "Château d'Esclans",
-    "wine": "Garrus Rosé N.V.",
-    "rating": {
-      "average": "3.5",
-      "reviews": "1844 ratings"
-    },
-    "location": "France\n·\nCôtes de Provence",
-    "image": "https://images.vivino.com/thumbs/NGq7QIE3QwSE0cAKrvPuTA_pb_x300.png",
-    "id": 27
-  },
-  {
-    "winery": "Minuty",
-    "wine": "281 Rosé N.V.",
-    "rating": {
-      "average": "3.7",
-      "reviews": "692 ratings"
-    },
-    "location": "France\n·\nProvence",
-    "image": "https://images.vivino.com/thumbs/CRBSmK3xRuqHdCg4TpBpVw_pb_x300.png",
-    "id": 28
-  },
-  {
-    "winery": "Château d'Esclans",
-    "wine": "Garrus Rosé 2014",
-    "rating": {
-      "average": "4.3",
-      "reviews": "476 ratings"
-    },
-    "location": "France\n·\nCôtes de Provence",
-    "image": "https://images.vivino.com/thumbs/NGq7QIE3QwSE0cAKrvPuTA_pb_x300.png",
-    "id": 29
-  },
-  {
     "winery": "Domaines Ott",
     "wine": "Château de Selle Rosé (Coeur de Grain) 2013",
     "rating": {
-      "average": "4.2",
+      "average": "4.1",
       "reviews": "241 ratings"
     },
     "location": "France\n·\nCôtes de Provence",
     "image": "https://images.vivino.com/thumbs/znOSQj0RQ5-wnZBGajuK9w_pb_x300.png",
     "id": 30
+  },
+  {
+    "winery": "Château d'Esclans",
+    "wine": "Rosé 2015",
+    "rating": {
+      "average": "4.7",
+      "reviews": "133 ratings"
+    },
+    "location": "France\n·\nCôtes de Provence",
+    "image": "https://images.vivino.com/thumbs/Id4QDWSbR0SEnLq-5Zj5KQ_pb_x300.png",
+    "id": 36
+  },
+  {
+    "winery": "Marani",
+    "wine": "Pirosmani Medium Dry Rosé 2016",
+    "rating": {
+      "average": "4.7",
+      "reviews": "104 ratings"
+    },
+    "location": "Georgia\n·\nKakheti",
+    "image": "https://images.vivino.com/thumbs/zwtlu0ULTDiN43iBOuVE-w_pb_x300.png",
+    "id": 38
+  },
+  {
+    "winery": "Notorious Pink",
+    "wine": "Grenache Rosé 2013",
+    "rating": {
+      "average": "3.3",
+      "reviews": "78 ratings"
+    },
+    "location": "France\n·\nVin de France",
+    "image": "https://images.vivino.com/thumbs/0iPgtJgmQ-2CeV5FUKQMfA_pb_x300.png",
+    "id": 39
+  },
+  {
+    "winery": "Château de Saint Martin",
+    "wine": "Eternelle Favorite Rosé 2012",
+    "rating": {
+      "average": "4.8",
+      "reviews": "72 ratings"
+    },
+    "location": "France\n·\nCôtes de Provence",
+    "image": "https://images.vivino.com/thumbs/ODBpWgzbSnuz-rO_guBoyg_pb_x300.png",
+    "id": 40
+  },
+  {
+    "winery": "Château Barbeyrolles",
+    "wine": "Pétale de Rosé 2018",
+    "rating": {
+      "average": "4.4",
+      "reviews": "68 ratings"
+    },
+    "location": "France\n·\nCôtes de Provence",
+    "image": "https://images.vivino.com/thumbs/Sx-mc4NxQc6b0zR0HPodqw_pb_x300.png",
+    "id": 42
+  },
+  {
+    "winery": "Encostas do Lima",
+    "wine": "Rosé 2015",
+    "rating": {
+      "average": "3.9",
+      "reviews": "56 ratings"
+    },
+    "location": "Portugal\n·\nVinho Verde",
+    "image": "https://images.vivino.com/thumbs/boQ570-lQcKcDj5rsJBCQQ_pb_x300.png",
+    "id": 43
+  },
+  {
+    "winery": "Domaine de l'Abbaye",
+    "wine": "Clos Beylesse Côtes de Provence Rosé 2018",
+    "rating": {
+      "average": "4.1",
+      "reviews": "49 ratings"
+    },
+    "location": "France\n·\nCôtes de Provence",
+    "image": "https://images.vivino.com/thumbs/xZn0pd4XTRy8AMP8njODpQ_pb_x300.png",
+    "id": 44
+  },
+  {
+    "winery": "Château de Caraguilhes",
+    "wine": "Cara de Caraguilhes Rosé 2017",
+    "rating": {
+      "average": "3.3",
+      "reviews": "40 ratings"
+    },
+    "location": "France\n·\nCorbières",
+    "image": "https://images.vivino.com/thumbs/A6x3Ax2STWKTbmAkwn8RgQ_pb_x300.png",
+    "id": 47
+  },
+  {
+    "winery": "Maison CR",
+    "wine": "Coeur de Rosé Prestige 2015",
+    "rating": {
+      "average": "3.6",
+      "reviews": "37 ratings"
+    },
+    "location": "France\n·\nCôtes de Provence",
+    "image": "https://images.vivino.com/thumbs/SL3tl_SdTv-qMOl54fyvBw_pb_x300.png",
+    "id": 49
+  },
+  {
+    "winery": "Unti",
+    "wine": "Rosé 2014",
+    "rating": {
+      "average": "3.4",
+      "reviews": "37 ratings"
+    },
+    "location": "United States\n·\nDry Creek Valley",
+    "image": "https://images.vivino.com/thumbs/u5iQqLRISUmZ5eQcT-DUKQ_pb_x300.png",
+    "id": 50
+  },
+  {
+    "winery": "François Cotat",
+    "wine": "Chavignol Sancerre Rosé 2015",
+    "rating": {
+      "average": "3.5",
+      "reviews": "34 ratings"
+    },
+    "location": "France\n·\nSancerre",
+    "image": "https://images.vivino.com/thumbs/Brth9y9JRgeSCsnhCj2bXw_pb_x300.png",
+    "id": 52
+  },
+  {
+    "winery": "Fattoria Aldobrandesca",
+    "wine": "Aleatico Toscana Rosato 2014",
+    "rating": {
+      "average": "3.7",
+      "reviews": "31 ratings"
+    },
+    "location": "Italy\n·\nToscana",
+    "image": "https://images.vivino.com/thumbs/mu0MhRNbSma0xmVFTkt3vA_pb_x300.png",
+    "id": 53
+  },
+  {
+    "winery": "90+ Cellars",
+    "wine": "ACK Provence Rosé N.V.",
+    "rating": {
+      "average": "4.3",
+      "reviews": "30 ratings"
+    },
+    "location": "France\n·\nProvence",
+    "image": "https://images.vivino.com/thumbs/V621_MNYRI-t8IbXgCMEVA_pb_x300.png",
+    "id": 54
+  },
+  {
+    "winery": "Bartenura",
+    "wine": "Malvasia Castelnuovo Don Bosco Rosé 2008",
+    "rating": {
+      "average": "4.2",
+      "reviews": "30 ratings"
+    },
+    "location": "Italy\n·\nMalvasia di Castelnuovo don Bosco",
+    "image": "https://images.vivino.com/thumbs/bx6znn-kQJ-hQ7GQWXlDuw_pb_x300.png",
+    "id": 55
   }
 ]
