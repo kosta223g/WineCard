@@ -54,6 +54,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.platform.LocalContext
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.flow.collect
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.ui.Alignment
@@ -67,6 +68,11 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavType
+import androidx.navigation.compose.currentBackStackEntryAsState
+import androidx.compose.material3.NavigationBar
+import androidx.compose.material3.NavigationBarItem
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -86,7 +92,10 @@ fun WineCatalogScreen(
     onSettingsClick: () -> Unit,
     sortByRating: Boolean,
     listState: LazyListState,
-    viewModel: WineCatalogViewModel
+    viewModel: WineCatalogViewModel,
+    favoriteIds: Set<Int>,
+    onToggleFavorite: (Int) -> Unit,
+    onCellarClick: () -> Unit
 ) {
     val uiState = viewModel.uiState
     val selectedCategory = uiState.selectedCategory
@@ -129,6 +138,9 @@ fun WineCatalogScreen(
                     }
                 },
                 actions = {
+                    IconButton(onClick = onCellarClick) {
+                        Icon(painterResource(R.drawable.ic_wine_heart), "Мій погріб", tint = WineBurgundy)
+                    }
                     IconButton(onClick = onSettingsClick) {
                         Icon(painter = painterResource(R.drawable.ic_wine_settings),
                             contentDescription = "Налаштування", tint = WineBurgundy)
@@ -139,7 +151,7 @@ fun WineCatalogScreen(
                         modifier = Modifier.padding(end = 18.dp)
                     ) {
                         Text(
-                            text = "№ 11",
+                            text = "№ 12",
                             modifier = Modifier.padding(horizontal = 13.dp, vertical = 8.dp),
                             color = WineBurgundy,
                             fontSize = 11.sp,
@@ -315,11 +327,11 @@ fun WineCatalogScreen(
                 }
                 filteredWines.isEmpty() -> item(key = "catalog-empty", contentType = "status") { EmptyWineResults(onRetry = viewModel::refresh) }
                 else -> items(filteredWines, key = { it.id }, contentType = { "wine" }) { wine ->
-                    WineCard(wine = wine, onClick = { onItemClick(wine.id) })
+                    WineCard(wine = wine, onClick = { onItemClick(wine.id) }, isFavorite = wine.id in favoriteIds, onToggleFavorite = { onToggleFavorite(wine.id) })
                 }
             }
             item(key = "catalog-footer", contentType = "footer") {
-                Text("Дані SampleAPIs · демонстраційні рейтинги · лабораторна робота №11", color = WineMuted,
+                Text("Дані SampleAPIs · демонстраційні рейтинги · лабораторна робота №12", color = WineMuted,
                     fontSize = 10.sp, modifier = Modifier.padding(vertical = 12.dp))
             }
         }
@@ -438,43 +450,90 @@ fun WineCardApp() {
         val sortByRating by settings.sortByRating.collectAsState(initial = null)
         val scope = rememberCoroutineScope()
 
-        NavHost(navController = navController, startDestination = "catalog") {
-            composable("catalog") {
-                WineCatalogScreen(
-                    viewModel = catalogViewModel,
-                    listState = catalogListState,
-                    sortByRating = sortByRating ?: DEFAULT_SORT_BY_RATING,
-                    onSettingsClick = {
-                        navController.navigate("settings") { launchSingleTop = true }
-                    },
-                    onItemClick = { id ->
-                        navController.navigate("details/$id") {
-                            launchSingleTop = true
-                        }
+        val cellarViewModel: WineCellarViewModel = viewModel()
+        val favoriteIds = cellarViewModel.favoriteIds.collectAsState().value
+        val entry by navController.currentBackStackEntryAsState()
+        val route = entry?.destination?.route
+        val snackbar = remember { SnackbarHostState() }
+        LaunchedEffect(cellarViewModel) {
+            cellarViewModel.messages.collect { snackbar.showSnackbar(it) }
+        }
+        val openTab: (String) -> Unit = { tab ->
+            if (route != tab) {
+                navController.navigate(tab) {
+                    popUpTo("catalog") { saveState = true }
+                    launchSingleTop = true
+                    restoreState = true
+                }
+            }
+        }
+        Scaffold(
+            snackbarHost = { SnackbarHost(snackbar) },
+            bottomBar = {
+                if (route == "catalog" || route == "cellar" || route == "settings") {
+                    NavigationBar(containerColor = Color.White) {
+                        NavigationBarItem(selected = route == "catalog", onClick = { openTab("catalog") },
+                            icon = { Icon(painterResource(R.drawable.ic_wine_catalog), null) }, label = { Text("Каталог") })
+                        NavigationBarItem(selected = route == "cellar", onClick = { openTab("cellar") },
+                            icon = { Icon(painterResource(R.drawable.ic_wine_heart), null) }, label = { Text("Мій погріб") })
+                        NavigationBarItem(selected = route == "settings", onClick = { openTab("settings") },
+                            icon = { Icon(painterResource(R.drawable.ic_wine_settings), null) }, label = { Text("Налаштування") })
                     }
-                )
+                }
             }
-            composable("settings") {
-                WineSettingsScreen(
-                    sortByRating = sortByRating,
-                    onSortChanged = { enabled ->
-                        scope.launch { settings.setSortByRating(enabled) }
-                    },
-                    onBackClick = { navController.popBackStack() }
-                )
-            }
-            composable(
-                route = "details/{id}",
-                arguments = listOf(navArgument("id") { type = NavType.IntType })
-            ) { entry ->
-                val id = entry.arguments?.getInt("id")
-                WineDetailsScreen(
-                    wine = id?.let { catalogViewModel.findWineById(it) },
-                    isLoading = catalogViewModel.uiState.isLoading,
-                    error = catalogViewModel.uiState.error,
-                    onRetry = catalogViewModel::refresh,
-                    onBackClick = { navController.popBackStack() }
-                )
+        ) { outerPadding ->
+            NavHost(navController = navController, startDestination = "catalog", modifier = Modifier.padding(outerPadding)) {
+                composable("catalog") {
+                    WineCatalogScreen(
+                        viewModel = catalogViewModel,
+                        listState = catalogListState,
+                        sortByRating = sortByRating ?: DEFAULT_SORT_BY_RATING,
+                        favoriteIds = favoriteIds.orEmpty(),
+                        onToggleFavorite = cellarViewModel::toggleFavorite,
+                        onCellarClick = { openTab("cellar") },
+                        onSettingsClick = { openTab("settings") },
+                        onItemClick = { id -> navController.navigate("details/$id") { launchSingleTop = true } }
+                    )
+                }
+                composable("cellar") {
+                    WineCellarScreen(
+                        viewModel = cellarViewModel,
+                        onCatalogClick = { openTab("catalog") },
+                        onItemClick = { id -> navController.navigate("cellar-details/$id") { launchSingleTop = true } }
+                    )
+                }
+                composable("settings") {
+                    WineSettingsScreen(
+                        sortByRating = sortByRating,
+                        onSortChanged = { enabled -> scope.launch { settings.setSortByRating(enabled) } },
+                        onBackClick = { navController.popBackStack() }
+                    )
+                }
+                composable("details/{id}", arguments = listOf(navArgument("id") { type = NavType.IntType })) { detailEntry ->
+                    val id = detailEntry.arguments?.getInt("id")
+                    WineDetailsScreen(
+                        wine = id?.let { catalogViewModel.findWineById(it) },
+                        isLoading = catalogViewModel.uiState.isLoading,
+                        error = catalogViewModel.uiState.error,
+                        onRetry = catalogViewModel::refresh,
+                        onBackClick = { navController.popBackStack() },
+                        isFavorite = id != null && id in favoriteIds.orEmpty(),
+                        onToggleFavorite = id?.let { selected -> { cellarViewModel.toggleFavorite(selected) } }
+                    )
+                }
+                composable("cellar-details/{id}", arguments = listOf(navArgument("id") { type = NavType.IntType })) { detailEntry ->
+                    val id = detailEntry.arguments?.getInt("id")
+                    val state = cellarViewModel.uiState
+                    WineDetailsScreen(
+                        wine = state.wines.firstOrNull { it.id == id },
+                        isLoading = state.isLoading,
+                        error = state.error,
+                        onRetry = cellarViewModel::refresh,
+                        onBackClick = { navController.popBackStack() },
+                        isFavorite = id != null && id in favoriteIds.orEmpty(),
+                        onToggleFavorite = id?.let { selected -> { cellarViewModel.toggleFavorite(selected) } }
+                    )
+                }
             }
         }
     }

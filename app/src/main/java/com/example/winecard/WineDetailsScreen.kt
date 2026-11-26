@@ -19,7 +19,7 @@ import androidx.compose.ui.unit.sp
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun WineDetailsScreen(wine: Wine?, isLoading: Boolean = false, error: WineLoadError? = null, onRetry: () -> Unit = {}, onBackClick: () -> Unit) {
+fun WineDetailsScreen(wine: Wine?, isLoading: Boolean = false, error: WineLoadError? = null, onRetry: () -> Unit = {}, onBackClick: () -> Unit, isFavorite: Boolean = false, onToggleFavorite: (() -> Unit)? = null) {
     Scaffold(
         containerColor = WineBackground,
         topBar = {
@@ -34,6 +34,7 @@ fun WineDetailsScreen(wine: Wine?, isLoading: Boolean = false, error: WineLoadEr
                         )
                     }
                 },
+                actions = { if (wine != null && onToggleFavorite != null) FavoriteButton(isFavorite, onToggleFavorite) },
                 colors = TopAppBarDefaults.topAppBarColors(containerColor = WineBackground)
             )
         }

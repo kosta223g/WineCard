@@ -19,7 +19,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
 @Composable
-internal fun WineCard(wine: Wine, onClick: () -> Unit) {
+internal fun WineCard(wine: Wine, onClick: () -> Unit, isFavorite: Boolean = false, onToggleFavorite: (() -> Unit)? = null) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -69,7 +69,9 @@ internal fun WineCard(wine: Wine, onClick: () -> Unit) {
         Column(
             modifier = Modifier.weight(1f)
         ) {
+            Row(verticalAlignment = Alignment.CenterVertically) {
             Text(
+                modifier = Modifier.weight(1f),
                 text = wine.winery.uppercase(),
                 color = WineBurgundy,
                 fontSize = 9.sp,
@@ -79,6 +81,8 @@ internal fun WineCard(wine: Wine, onClick: () -> Unit) {
                 overflow = TextOverflow.Ellipsis
             )
 
+            if (onToggleFavorite != null) FavoriteButton(isFavorite, onToggleFavorite)
+            }
             Spacer(modifier = Modifier.height(5.dp))
 
             Text(

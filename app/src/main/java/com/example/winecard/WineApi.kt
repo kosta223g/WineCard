@@ -140,3 +140,18 @@ internal suspend fun loadWines(category: String, api: WineApi = WineNetwork.api)
 // IDs are stable within category; repeated source IDs must never reach LazyColumn.
 internal fun uniqueCatalogWines(wines: List<Wine>): List<Wine> = wines.distinctBy { it.id }
 
+
+internal fun favoriteCategories(ids: Set<Int>): List<String> =
+    wineEndpoints.keys.filterIndexed { index, _ -> ids.any { it / 100_000_000 == index + 1 } }
+
+internal fun selectFavoriteWines(wines: List<Wine>, ids: Set<Int>): List<Wine> =
+    wines.filter { it.id in ids }
+
+// Resolve saved IDs from fresh remote category responses, independent of the catalog screen.
+internal suspend fun loadFavoriteWines(ids: Set<Int>, api: WineApi = WineNetwork.api): List<Wine> = coroutineScope {
+    if (ids.isEmpty()) return@coroutineScope emptyList()
+    val wines = favoriteCategories(ids).map { category ->
+        async { loadWines(category, api) }
+    }.awaitAll().flatten()
+    selectFavoriteWines(wines, ids)
+}
