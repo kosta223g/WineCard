@@ -4,6 +4,10 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.ui.focus.onFocusChanged
+import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -90,6 +94,11 @@ fun WineCatalogScreen(
         sortCatalogWines(uiState.filteredWines, sortByRating)
     }
 
+    val focusManager = LocalFocusManager.current
+    var searchFocused by remember { mutableStateOf(false) }
+    val suggestions = remember(uiState.wines, selectedCategory, uiState.searchQuery) {
+        suggestCatalogWines(uiState.wines, selectedCategory, uiState.searchQuery)
+    }
     var previousQuery by rememberSaveable { mutableStateOf(uiState.appliedQuery) }
     LaunchedEffect(uiState.appliedQuery) {
         if (previousQuery != uiState.appliedQuery) {
@@ -192,11 +201,12 @@ fun WineCatalogScreen(
             OutlinedTextField(
                 value = uiState.searchQuery,
                 onValueChange = viewModel::onSearchQueryChanged,
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier.fillMaxWidth().onFocusChanged { searchFocused = it.isFocused },
                 label = { Text("Пошук вина") },
                 placeholder = { Text("Назва, виробник або регіон") },
                 singleLine = true,
                 keyboardOptions = KeyboardOptions(imeAction = ImeAction.Search),
+                keyboardActions = KeyboardActions(onSearch = { focusManager.clearFocus() }),
                 trailingIcon = {
                     if (uiState.searchQuery.isNotEmpty()) {
                         TextButton(onClick = viewModel::clearSearch) { Text("×", fontSize = 24.sp) }
@@ -204,6 +214,33 @@ fun WineCatalogScreen(
                 },
                 shape = RoundedCornerShape(16.dp)
             )
+            if (searchFocused && suggestions.isNotEmpty() && !uiState.isLoading && uiState.error == null) {
+                Spacer(Modifier.height(6.dp))
+                Column(
+                    Modifier.fillMaxWidth().clip(RoundedCornerShape(16.dp))
+                        .background(Color.White).padding(8.dp)
+                ) {
+                    Text("ПІДКАЗКИ", color = WineMuted, fontSize = 10.sp,
+                        modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp))
+                    suggestions.forEach { wine ->
+                        Row(
+                            Modifier.fillMaxWidth().clickable {
+                                focusManager.clearFocus()
+                                onItemClick(wine.id)
+                            }.padding(8.dp),
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            WinePhoto(wine, Modifier.width(32.dp).height(48.dp))
+                            Spacer(Modifier.width(10.dp))
+                            Column(Modifier.weight(1f)) {
+                                Text(wine.wine, color = WineInk, fontSize = 14.sp,
+                                    fontWeight = FontWeight.SemiBold)
+                                Text(wine.winery, color = WineMuted, fontSize = 11.sp)
+                            }
+                        }
+                    }
+                }
+            }
             Spacer(modifier = Modifier.height(16.dp))
 
             Text(

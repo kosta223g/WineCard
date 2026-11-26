@@ -23,4 +23,9 @@ class WineSearchTest {
     @Test fun noMatches() {
         assertEquals(emptyList<Wine>(), filterCatalogWines(wines, "Усі", "xyznotfound"))
     }
+    @Test fun suggestionsFromFirstLetter() {
+        assertEquals(listOf(red, white), suggestCatalogWines(wines, "Усі", "c"))
+        assertEquals(listOf(white), suggestCatalogWines(wines, "Біле", "ch"))
+        assertEquals(emptyList<Wine>(), suggestCatalogWines(wines, "Усі", ""))
+    }
 }
