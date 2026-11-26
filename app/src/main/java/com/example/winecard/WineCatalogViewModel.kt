@@ -8,6 +8,7 @@ import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.delay
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 
@@ -23,22 +24,28 @@ data class WineCatalogUiState(
     val selectedCategory: String = "Усі",
     val categories: List<String> = wineCategories,
     val wines: List<Wine> = emptyList(),
+    val searchQuery: String = "",
+    val appliedQuery: String = "",
+    val isSearching: Boolean = false,
     val isLoading: Boolean = true,
     val isRefreshing: Boolean = false,
     val refreshError: WineLoadError? = null,
     val error: WineLoadError? = null
 ) {
     val filteredWines: List<Wine>
-        get() = if (selectedCategory == "Усі") wines else wines.filter { it.category == selectedCategory }
+        get() = filterCatalogWines(wines, selectedCategory, appliedQuery)
 }
 
 class WineCatalogViewModel(application: Application, private val savedStateHandle: SavedStateHandle) : AndroidViewModel(application) {
     var uiState by mutableStateOf(WineCatalogUiState(
         selectedCategory = savedStateHandle.get<String>("selectedCategory")
-            ?.takeIf { it in wineCategories } ?: "Усі"
+            ?.takeIf { it in wineCategories } ?: "Усі",
+        searchQuery = savedStateHandle.get<String>("searchQuery").orEmpty(),
+        appliedQuery = savedStateHandle.get<String>("searchQuery").orEmpty().trim()
     ))
         private set
     private var loadingJob: Job? = null
+    private var searchJob: Job? = null
 
     init { refresh() }
 
@@ -51,6 +58,24 @@ class WineCatalogViewModel(application: Application, private val savedStateHandl
         refresh()
     }
 
+    fun onSearchQueryChanged(query: String) {
+        searchJob?.cancel()
+        savedStateHandle["searchQuery"] = query
+        val normalized = query.trim()
+        uiState = uiState.copy(searchQuery = query, isSearching = normalized.isNotEmpty() && normalized != uiState.appliedQuery)
+        if (normalized.isEmpty()) {
+            uiState = uiState.copy(appliedQuery = "", isSearching = false)
+            return
+        }
+        if (!uiState.isSearching) return
+        searchJob = viewModelScope.launch {
+            delay(350)
+            uiState = uiState.copy(appliedQuery = normalized, isSearching = false)
+        }
+    }
+
+    fun clearSearch() = onSearchQueryChanged("")
+
     fun refresh() = requestCatalog(keepContent = false)
 
     fun pullToRefresh() {
@@ -60,6 +85,7 @@ class WineCatalogViewModel(application: Application, private val savedStateHandl
 
     private fun requestCatalog(keepContent: Boolean) {
         loadingJob?.cancel()
+        // Retry and refresh retain the current search; no text is sent to the server.
         val category = uiState.selectedCategory
         uiState = uiState.copy(
             wines = if (keepContent) uiState.wines else emptyList(),

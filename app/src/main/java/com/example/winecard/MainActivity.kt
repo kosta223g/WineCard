@@ -26,6 +26,14 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.OutlinedButton
+import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.TextButton
+import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FilterChip
 import androidx.compose.material3.FilterChipDefaults
@@ -78,8 +86,16 @@ fun WineCatalogScreen(
 ) {
     val uiState = viewModel.uiState
     val selectedCategory = uiState.selectedCategory
-    val filteredWines = remember(uiState.wines, selectedCategory, sortByRating) {
+    val filteredWines = remember(uiState.wines, selectedCategory, uiState.appliedQuery, sortByRating) {
         sortCatalogWines(uiState.filteredWines, sortByRating)
+    }
+
+    var previousQuery by rememberSaveable { mutableStateOf(uiState.appliedQuery) }
+    LaunchedEffect(uiState.appliedQuery) {
+        if (previousQuery != uiState.appliedQuery) {
+            listState.scrollToItem(0)
+            previousQuery = uiState.appliedQuery
+        }
     }
 
     Scaffold(
@@ -114,7 +130,7 @@ fun WineCatalogScreen(
                         modifier = Modifier.padding(end = 18.dp)
                     ) {
                         Text(
-                            text = "№ 10",
+                            text = "№ 11",
                             modifier = Modifier.padding(horizontal = 13.dp, vertical = 8.dp),
                             color = WineBurgundy,
                             fontSize = 11.sp,
@@ -173,6 +189,23 @@ fun WineCatalogScreen(
 
             Spacer(modifier = Modifier.height(24.dp))
 
+            OutlinedTextField(
+                value = uiState.searchQuery,
+                onValueChange = viewModel::onSearchQueryChanged,
+                modifier = Modifier.fillMaxWidth(),
+                label = { Text("Пошук вина") },
+                placeholder = { Text("Назва, виробник або регіон") },
+                singleLine = true,
+                keyboardOptions = KeyboardOptions(imeAction = ImeAction.Search),
+                trailingIcon = {
+                    if (uiState.searchQuery.isNotEmpty()) {
+                        TextButton(onClick = viewModel::clearSearch) { Text("×", fontSize = 24.sp) }
+                    }
+                },
+                shape = RoundedCornerShape(16.dp)
+            )
+            Spacer(modifier = Modifier.height(16.dp))
+
             Text(
                 text = "ОБЕРИ ТИП ВИНА",
                 color = WineBurgundy,
@@ -197,14 +230,14 @@ fun WineCatalogScreen(
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
                 Text(
-                    text = if (selectedCategory == "Усі") "Добірка вин" else selectedCategory + " вина",
+                    text = if (uiState.appliedQuery.isNotBlank()) "Результати пошуку" else if (selectedCategory == "Усі") "Добірка вин" else selectedCategory + " вина",
                     color = WineInk,
                     fontSize = 21.sp,
                     fontWeight = FontWeight.SemiBold,
                     fontFamily = FontFamily.Serif
                 )
                 Text(
-                    text = "ПОЗИЦІЙ: ${filteredWines.size}",
+                    text = if (uiState.isSearching) "ПОШУК…" else "ПОЗИЦІЙ: ${filteredWines.size}",
                     color = WineMuted,
                     fontSize = 10.sp,
                     letterSpacing = 1.sp
@@ -234,8 +267,14 @@ fun WineCatalogScreen(
                 uiState.error != null -> item(key = "catalog-error", contentType = "status") {
                     WineErrorContent(error = uiState.error, onRetry = viewModel::refresh)
                 }
+                uiState.isSearching -> item(key = "catalog-searching", contentType = "status") {
+                    Text("Шукаємо вина…", color = WineMuted)
+                }
                 uiState.isRefreshing && filteredWines.isEmpty() -> item(key = "catalog-refreshing", contentType = "status") {
                     Text("Оновлюємо каталог…", color = WineMuted)
+                }
+                filteredWines.isEmpty() && uiState.appliedQuery.isNotBlank() -> item(key = "catalog-search-empty", contentType = "status") {
+                    EmptySearchResults(uiState.appliedQuery, viewModel::clearSearch)
                 }
                 filteredWines.isEmpty() -> item(key = "catalog-empty", contentType = "status") { EmptyWineResults(onRetry = viewModel::refresh) }
                 else -> items(filteredWines, key = { it.id }, contentType = { "wine" }) { wine ->
@@ -243,7 +282,7 @@ fun WineCatalogScreen(
                 }
             }
             item(key = "catalog-footer", contentType = "footer") {
-                Text("Дані SampleAPIs · демонстраційні рейтинги · лабораторна робота №10", color = WineMuted,
+                Text("Дані SampleAPIs · демонстраційні рейтинги · лабораторна робота №11", color = WineMuted,
                     fontSize = 10.sp, modifier = Modifier.padding(vertical = 12.dp))
             }
         }
@@ -287,6 +326,20 @@ private fun WineCategorySelector(
                 )
             )
         }
+    }
+}
+
+@Composable
+private fun EmptySearchResults(query: String, onClear: () -> Unit) {
+    Column(
+        modifier = Modifier.fillMaxWidth().clip(RoundedCornerShape(22.dp))
+            .background(Color.White).padding(24.dp),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.spacedBy(12.dp)
+    ) {
+        Text("Нічого не знайдено", color = WineInk, fontSize = 20.sp, fontWeight = FontWeight.Bold)
+        Text("За запитом «$query» у вибраній категорії немає вин.", color = WineMuted)
+        OutlinedButton(onClick = onClear) { Text("Очистити пошук") }
     }
 }
 
