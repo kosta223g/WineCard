@@ -5,6 +5,9 @@ import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.background
+import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.runtime.SideEffect
+import androidx.core.view.WindowCompat
 import androidx.compose.foundation.clickable
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.platform.LocalFocusManager
@@ -411,14 +414,30 @@ private fun EmptyWineResults(onRetry: () -> Unit) {
 
 @Composable
 fun WineCardApp() {
-    WineCardTheme {
+    val context = LocalContext.current.applicationContext
+    val settings = remember(context) { WineSettingsRepository(context) }
+    val themeMode by settings.themeMode.collectAsState(initial = WineThemeMode.SYSTEM)
+    val systemDark = isSystemInDarkTheme()
+    val darkTheme = when (themeMode) {
+        WineThemeMode.SYSTEM -> systemDark
+        WineThemeMode.LIGHT -> false
+        WineThemeMode.DARK -> true
+    }
+    val activity = LocalContext.current as? ComponentActivity
+    SideEffect {
+        activity?.window?.let { window ->
+            WindowCompat.getInsetsController(window, window.decorView).apply {
+                isAppearanceLightStatusBars = !darkTheme
+                isAppearanceLightNavigationBars = !darkTheme
+            }
+        }
+    }
+    WineCardTheme(darkTheme = darkTheme) {
         // Activity-scoped ViewModel survives navigation and rotation.
         val catalogViewModel: WineCatalogViewModel = viewModel()
         // Hoisted outside NavHost: retained while the details destination is visible.
         val catalogListState = rememberLazyListState()
         val navController = rememberNavController()
-        val context = LocalContext.current.applicationContext
-        val settings = remember(context) { WineSettingsRepository(context) }
         val sortByRating by settings.sortByRating.collectAsState(initial = null)
         val scope = rememberCoroutineScope()
 
@@ -477,6 +496,8 @@ fun WineCardApp() {
                 composable("settings") {
                     WineSettingsScreen(
                         sortByRating = sortByRating,
+                        themeMode = themeMode,
+                        onThemeChanged = { mode -> scope.launch { settings.setThemeMode(mode) } },
                         onSortChanged = { enabled -> scope.launch { settings.setSortByRating(enabled) } },
                         onBackClick = { navController.popBackStack() }
                     )

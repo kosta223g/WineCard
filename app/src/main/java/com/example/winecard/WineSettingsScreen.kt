@@ -1,6 +1,9 @@
 package com.example.winecard
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.selection.selectable
+import androidx.compose.foundation.selection.selectableGroup
+import androidx.compose.ui.semantics.Role
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.layout.*
@@ -22,6 +25,8 @@ import androidx.compose.ui.unit.sp
 fun WineSettingsScreen(
     sortByRating: Boolean?,
     onSortChanged: (Boolean) -> Unit,
+    themeMode: WineThemeMode,
+    onThemeChanged: (WineThemeMode) -> Unit,
     onBackClick: () -> Unit
 ) {
     Scaffold(
@@ -42,6 +47,30 @@ fun WineSettingsScreen(
             modifier = Modifier.fillMaxSize().padding(padding).verticalScroll(rememberScrollState()).padding(20.dp),
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
+            Text("Оформлення", color = WineInk, style = MaterialTheme.typography.headlineMedium)
+            Text("Обери тему застосунку.", color = WineMuted)
+            Column(
+                Modifier.fillMaxWidth().clip(RoundedCornerShape(20.dp))
+                    .background(MaterialTheme.colorScheme.surface).selectableGroup().padding(8.dp)
+            ) {
+                WineThemeMode.entries.forEach { mode ->
+                    Row(
+                        Modifier.fillMaxWidth().selectable(
+                            selected = themeMode == mode,
+                            onClick = { onThemeChanged(mode) },
+                            role = Role.RadioButton
+                        ).padding(8.dp),
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.spacedBy(12.dp)
+                    ) {
+                        RadioButton(selected = themeMode == mode, onClick = null)
+                        Column(Modifier.weight(1f)) {
+                            Text(mode.label, style = MaterialTheme.typography.bodyLarge, color = WineInk)
+                            Text(mode.description, style = MaterialTheme.typography.bodySmall, color = WineMuted)
+                        }
+                    }
+                }
+            }
             Text("Твій каталог", color = WineInk, style = MaterialTheme.typography.headlineMedium)
             Text("Налаштуй порядок відображення вин. Вибір зберігається на пристрої.",
                 color = WineMuted)
