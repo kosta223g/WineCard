@@ -16,13 +16,13 @@ import androidx.compose.ui.unit.sp
 @Composable
 fun WineErrorContent(error: WineLoadError, onRetry: () -> Unit) {
     Column(
-        Modifier.fillMaxWidth().clip(RoundedCornerShape(20.dp)).background(Color.White).padding(20.dp),
+        Modifier.fillMaxWidth().clip(RoundedCornerShape(20.dp)).background(MaterialTheme.colorScheme.surface).padding(20.dp),
         verticalArrangement = Arrangement.spacedBy(12.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Text(error.title, color = WineBurgundy, fontWeight = FontWeight.Bold, fontSize = 19.sp)
+        Text(error.title, color = WineBurgundy, style = MaterialTheme.typography.titleMedium)
         Text(error.message, color = WineInk)
-        Button(onClick = onRetry, colors = ButtonDefaults.buttonColors(containerColor = WineBurgundy)) {
+        Button(onClick = onRetry, colors = ButtonDefaults.buttonColors(containerColor = WineBurgundy, contentColor = MaterialTheme.colorScheme.onPrimary)) {
             Text("Спробувати ще")
         }
     }

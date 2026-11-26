@@ -42,20 +42,19 @@ fun WineSettingsScreen(
             modifier = Modifier.fillMaxSize().padding(padding).verticalScroll(rememberScrollState()).padding(20.dp),
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
-            Text("Твій каталог", color = WineInk, fontSize = 28.sp,
-                fontFamily = FontFamily.Serif, fontWeight = FontWeight.SemiBold)
+            Text("Твій каталог", color = WineInk, style = MaterialTheme.typography.headlineMedium)
             Text("Налаштуй порядок відображення вин. Вибір зберігається на пристрої.",
-                color = WineMuted, lineHeight = 21.sp)
+                color = WineMuted)
             Row(
                 modifier = Modifier.fillMaxWidth().clip(RoundedCornerShape(20.dp))
-                    .background(Color.White).padding(16.dp),
+                    .background(MaterialTheme.colorScheme.surface).padding(16.dp),
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.spacedBy(12.dp)
             ) {
                 Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(6.dp)) {
-                    Text("Сортувати за рейтингом", color = WineInk, fontWeight = FontWeight.SemiBold)
+                    Text("Сортувати за рейтингом", color = WineInk)
                     Text("Найвищі оцінки першими. Якщо вимкнено — початковий порядок каталогу.",
-                        color = WineMuted, fontSize = 13.sp, lineHeight = 19.sp)
+                        color = WineMuted, style = MaterialTheme.typography.bodySmall)
                 }
                 if (sortByRating == null) {
                     CircularProgressIndicator(Modifier.size(24.dp), color = WineBurgundy)
@@ -67,7 +66,7 @@ fun WineSettingsScreen(
                     )
                 }
             }
-            Text("Зміни застосовуються автоматично.", color = WineMuted, fontSize = 12.sp)
+            Text("Зміни застосовуються автоматично.", color = WineMuted, style = MaterialTheme.typography.bodySmall)
             WineUpdateNotificationControl()
         }
     }

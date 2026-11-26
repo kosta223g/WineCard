@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -25,7 +26,7 @@ internal fun WineCard(wine: Wine, onClick: () -> Unit, isFavorite: Boolean = fal
             .fillMaxWidth()
             .clip(RoundedCornerShape(22.dp))
             .clickable(onClick = onClick)
-            .background(Color.White)
+            .background(MaterialTheme.colorScheme.surface)
             .padding(12.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
@@ -37,8 +38,8 @@ internal fun WineCard(wine: Wine, onClick: () -> Unit, isFavorite: Boolean = fal
                 .background(
                     brush = Brush.verticalGradient(
                         colors = listOf(
-                            Color(0xFFF5EDE6),
-                            Color(0xFFEDE0D6)
+                            MaterialTheme.colorScheme.surfaceVariant,
+                            MaterialTheme.colorScheme.secondaryContainer
                         )
                     )
                 ),
@@ -50,15 +51,13 @@ internal fun WineCard(wine: Wine, onClick: () -> Unit, isFavorite: Boolean = fal
                 modifier = Modifier
                     .align(Alignment.TopStart)
                     .padding(7.dp),
-                color = Color(0xFFFDF9F4),
+                color = MaterialTheme.colorScheme.surface,
                 shape = RoundedCornerShape(50)
             ) {
                 Text(
                     text = wine.category.uppercase(),
                     color = WineBurgundy,
-                    fontSize = 8.sp,
-                    fontWeight = FontWeight.Bold,
-                    letterSpacing = 0.7.sp,
+                    style = MaterialTheme.typography.labelSmall,
                     modifier = Modifier.padding(horizontal = 7.dp, vertical = 4.dp)
                 )
             }
@@ -74,9 +73,7 @@ internal fun WineCard(wine: Wine, onClick: () -> Unit, isFavorite: Boolean = fal
                 modifier = Modifier.weight(1f),
                 text = wine.winery.uppercase(),
                 color = WineBurgundy,
-                fontSize = 9.sp,
-                fontWeight = FontWeight.Bold,
-                letterSpacing = 1.1.sp,
+                style = MaterialTheme.typography.labelSmall,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis
             )
@@ -88,10 +85,7 @@ internal fun WineCard(wine: Wine, onClick: () -> Unit, isFavorite: Boolean = fal
             Text(
                 text = wine.wine,
                 color = WineInk,
-                fontSize = 17.sp,
-                lineHeight = 21.sp,
-                fontWeight = FontWeight.SemiBold,
-                fontFamily = FontFamily.Serif,
+                style = MaterialTheme.typography.titleMedium,
                 maxLines = 2,
                 overflow = TextOverflow.Ellipsis
             )
@@ -101,9 +95,7 @@ internal fun WineCard(wine: Wine, onClick: () -> Unit, isFavorite: Boolean = fal
             Text(
                 text = "РЕГІОН",
                 color = WineMuted,
-                fontSize = 8.sp,
-                fontWeight = FontWeight.Bold,
-                letterSpacing = 1.2.sp
+                style = MaterialTheme.typography.labelSmall
             )
 
             Spacer(modifier = Modifier.height(3.dp))
@@ -111,8 +103,7 @@ internal fun WineCard(wine: Wine, onClick: () -> Unit, isFavorite: Boolean = fal
             Text(
                 text = wine.location,
                 color = WineInk,
-                fontSize = 11.sp,
-                lineHeight = 15.sp,
+                style = MaterialTheme.typography.labelMedium,
                 maxLines = 2,
                 overflow = TextOverflow.Ellipsis
             )
@@ -125,14 +116,13 @@ internal fun WineCard(wine: Wine, onClick: () -> Unit, isFavorite: Boolean = fal
                 Text(
                     text = "★ ${wine.rating.average}",
                     color = WineGold,
-                    fontSize = 13.sp,
-                    fontWeight = FontWeight.Bold
+                    style = MaterialTheme.typography.bodySmall
                 )
                 Spacer(modifier = Modifier.width(7.dp))
                 Text(
                     text = "Демо-рейтинг",
                     color = WineMuted,
-                    fontSize = 9.sp,
+                    style = MaterialTheme.typography.labelSmall,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis
                 )

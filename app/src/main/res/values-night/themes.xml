@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="Theme.WineCard" parent="android:Theme.Material.NoActionBar">
+        <item name="android:windowBackground">#191416</item>
+    </style>
+    <style name="Theme.WineCard.Starting" parent="Theme.SplashScreen">
+        <item name="windowSplashScreenBackground">#76283B</item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/ic_wine_brand</item>
+        <item name="postSplashScreenTheme">@style/Theme.WineCard</item>
+    </style>
+</resources>

@@ -47,8 +47,8 @@ internal fun WineCellarScreen(viewModel: WineCellarViewModel, onCatalogClick: ()
         ) {
             item(key = "cellar-header") {
                 Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                    Text("ОСОБИСТА КОЛЕКЦІЯ", color = WineBurgundy, fontSize = 11.sp, fontWeight = FontWeight.Bold)
-                    Text("Твої улюблені вина", color = WineInk, fontSize = 29.sp, fontFamily = FontFamily.Serif)
+                    Text("ОСОБИСТА КОЛЕКЦІЯ", color = WineBurgundy, style = MaterialTheme.typography.labelMedium)
+                    Text("Твої улюблені вина", color = WineInk, style = MaterialTheme.typography.headlineMedium)
                     Text("Збережено: ${ids?.size ?: 0}", color = WineMuted)
                 }
             }
@@ -62,7 +62,7 @@ internal fun WineCellarScreen(viewModel: WineCellarViewModel, onCatalogClick: ()
                     Column(Modifier.fillMaxWidth().padding(vertical = 30.dp),
                         horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.spacedBy(12.dp)) {
                         Icon(painterResource(R.drawable.ic_wine_heart), null, tint = WineBurgundy, modifier = Modifier.size(48.dp))
-                        Text("Твій погріб ще порожній", fontSize = 22.sp, color = WineInk)
+                        Text("Твій погріб ще порожній", style = MaterialTheme.typography.titleLarge, color = WineInk)
                         Text("Познач вина сердечком, щоб зберегти їх тут.", color = WineMuted)
                         OutlinedButton(onClick = onCatalogClick) { Text("До каталогу") }
                     }

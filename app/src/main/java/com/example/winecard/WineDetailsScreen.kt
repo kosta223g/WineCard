@@ -50,26 +50,23 @@ fun WineDetailsScreen(wine: Wine?, isLoading: Boolean = false, error: WineLoadEr
             } else if (error != null) {
                 WineErrorContent(error, onRetry)
             } else if (wine == null) {
-                Text("Вино не знайдено", fontSize = 24.sp, color = WineInk,
-                    fontWeight = FontWeight.SemiBold)
+                Text("Вино не знайдено", style = MaterialTheme.typography.headlineSmall, color = WineInk)
                 Text("Цієї позиції немає в каталозі. Повернися до списку та обери інше вино.",
                     color = WineMuted)
                 OutlinedButton(onClick = onBackClick) { Text("До каталогу") }
             } else {
-                WinePhoto(wine, Modifier.fillMaxWidth().height(220.dp).clip(RoundedCornerShape(16.dp)).background(Color.White).padding(12.dp))
-                Text(wine.category.uppercase(), color = WineBurgundy,
-                    fontWeight = FontWeight.Bold, letterSpacing = 2.sp, fontSize = 12.sp)
-                Text(wine.wine, color = WineInk, fontSize = 32.sp, lineHeight = 38.sp,
-                    fontFamily = FontFamily.Serif, fontWeight = FontWeight.SemiBold)
-                Text(wine.winery, color = WineMuted, fontSize = 16.sp)
+                WinePhoto(wine, Modifier.fillMaxWidth().height(220.dp).clip(RoundedCornerShape(16.dp)).background(MaterialTheme.colorScheme.surface).padding(12.dp))
+                Text(wine.category.uppercase(), color = WineBurgundy, style = MaterialTheme.typography.bodySmall)
+                Text(wine.wine, color = WineInk, style = MaterialTheme.typography.headlineLarge)
+                Text(wine.winery, color = WineMuted, style = MaterialTheme.typography.bodyLarge)
                 Text("★ ${wine.rating.average} · Демо-рейтинг",
-                    color = WineGold, fontWeight = FontWeight.Bold)
+                    color = WineGold)
                 WineDetailSection("Регіон", wine.location)
                 WineDetailSection("Виробник", wine.winery)
                 WineDetailSection("Кількість оцінок у джерелі", wine.rating.reviews)
                 WineDetailSection("ID у джерелі", wine.apiId.toString())
                 Text("Джерело: SampleAPIs. Рейтинг демонстраційний. Фото з адреси джерела.",
-                    color = WineMuted, fontSize = 12.sp, lineHeight = 18.sp)
+                    color = WineMuted, style = MaterialTheme.typography.bodySmall)
             }
         }
     }
@@ -79,11 +76,10 @@ fun WineDetailsScreen(wine: Wine?, isLoading: Boolean = false, error: WineLoadEr
 private fun WineDetailSection(label: String, value: String) {
     Column(
         modifier = Modifier.fillMaxWidth().clip(RoundedCornerShape(16.dp))
-            .background(Color.White).padding(16.dp),
+            .background(MaterialTheme.colorScheme.surface).padding(16.dp),
         verticalArrangement = Arrangement.spacedBy(7.dp)
     ) {
-        Text(label.uppercase(), color = WineBurgundy, fontSize = 11.sp,
-            letterSpacing = 1.sp, fontWeight = FontWeight.Bold)
-        Text(value, color = WineInk, fontSize = 16.sp, lineHeight = 23.sp)
+        Text(label.uppercase(), color = WineBurgundy, style = MaterialTheme.typography.labelMedium)
+        Text(value, color = WineInk, style = MaterialTheme.typography.bodyLarge)
     }
 }
